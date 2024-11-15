@@ -9,16 +9,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const hobbiesSection = document.getElementById("hobbies-section");
 
     // Verifica si el usuario está logueado
-    if (localStorage.getItem("userLoggedIn")) {
-        const user = JSON.parse(localStorage.getItem("userLoggedIn"));
+    if (sessionStorage.getItem("userLoggedIn")) {
+        const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
         userLogged.style.display = "flex";
         userGuest.style.display = "none";
-        userAvatar.src = user.photo || "img/placeholder-avatar.png";
+        userAvatar.src = user.image || "img/placeholder.png";
         usernameSpan.textContent = user.nick;
 
         // Mostrar el botón de logout
         logoutBtn.addEventListener("click", function() {
-            localStorage.removeItem("userLoggedIn");
+            sessionStorage.removeItem("userLoggedIn");
             window.location.reload();
         });
 
@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const ageRange = document.getElementById("age-range").value;
         const city = document.getElementById("city").value;
         
-        // Almacena los datos de búsqueda en el almacenamiento local o pasa por URL
+        // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
         const searchData = { gender, ageRange, city };
 
         // Redirigir a la página de resultados
-        localStorage.setItem("searchData", JSON.stringify(searchData));
+        sessionStorage.setItem("searchData", JSON.stringify(searchData));
         window.location.href = "resultados.html"; // Página de resultados
     });
 });

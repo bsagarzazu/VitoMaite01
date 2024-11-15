@@ -1,6 +1,6 @@
 // TODO: coordinate info is missing for the users, that will be added towards the end with Google Maps API
-// User table data
 document.addEventListener("DOMContentLoaded", (event) => {
+    // User table data
     const users = [
         {email: "inigo4592@gmail.com", password: "a3f1g2k8", nick: "Iñigo", city: "Donostia", age: 34, gender: "H", latitde: 0, longitude: 0, image: ""},
         {email: "ane7281@gmail.com", password: "w8d4k1j3", nick: "Ane", city: "Vitoria", age: 26, gender: "M", latitde: 0, longitude: 0,  image: ""},
