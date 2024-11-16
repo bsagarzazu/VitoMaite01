@@ -1,4 +1,5 @@
 // TODO: coordinate info is missing for the users, that will be added towards the end with Google Maps API
+// TODO: add image support
 document.addEventListener("DOMContentLoaded", (event) => {
     // User table data
     const users = [

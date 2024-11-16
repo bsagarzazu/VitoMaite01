@@ -9,13 +9,16 @@ document.addEventListener("DOMContentLoaded", (event) => {
         if (!db.objectStoreNames.contains("hobbies")) {
             db.createObjectStore("hobbies", { keyPath: "hobbyId" , autoIncrement: true});
         }
-        // TODO: this keyPath should take into account both email1 and email2
         if (!db.objectStoreNames.contains("likes")) {
             db.createObjectStore("likes", { keyPath: ["email1", "email2"] });
         }
-        // TODO: same, should be email and hobbyId
         if(!db.objectStoreNames.contains("userHobby")) {
             db.createObjectStore("userHobby", {keyPath: ["userEmail", "hobbyId"]});
         }
     };
+});
+
+// Stop data from loading twice after reloading or closing/entering
+window.addEventListener("unload", (event) => {
+    const request = window.indexedDB.deleteDatabase("vitomaite01");
 });

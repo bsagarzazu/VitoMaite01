@@ -4,16 +4,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     searchBtn.addEventListener("click", function() {
         const gender = document.getElementById("search-gender").value;
-        const ageRange = document.getElementById("age-range").value;
+        const minAge = document.getElementById("age-min").value;
+        const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
-
         // Simulamos una búsqueda de usuarios
-        const results = searchUsers(gender, ageRange, city);
+        // TODO: obtener el search data del session storage
+        const results = searchUsers(gender, minAge, maxAge, city);
         displaySearchResults(results);
     });
 
     // Función para simular búsqueda de usuarios
-    function searchUsers(gender, ageRange, city) {
+    function searchUsers(gender, minAge, maxAge, city) {
         // Simulación de usuarios de base de datos
         const users = [
             { name: "Juan", age: 25, city: "Gasteiz", photo: "https://via.placeholder.com/150" },
@@ -28,15 +29,20 @@ document.addEventListener("DOMContentLoaded", function() {
     function displaySearchResults(users) {
         const resultsDiv = document.getElementById("search-results");
         resultsDiv.innerHTML = "";
-
-        users.forEach(user => {
-            const userDiv = document.createElement("div");
-            userDiv.className = "user-result";
-            userDiv.innerHTML = `
-                <img src="${user.photo}" alt="${user.name}" class="user-photo">
-                <p>${user.name} (${user.age})</p>
+        
+        users.forEach((user) => {
+            const profileDiv = document.createElement("div");
+            profileDiv.className = "profile";
+            // TODO: display the actual image
+            profileDiv.innerHTML = `
+                <div class="profile-img">
+                    <img src"img/placeholder.jpg">
+                </div>
+                <div id="name-age">
+                    <p><span class="name">${user.nick}</span>  ${user.age}</p>
+                </div>
             `;
-            resultsDiv.appendChild(userDiv);
+            resultsDiv.appendChild(profileDiv);
         });
     }
 });

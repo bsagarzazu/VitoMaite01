@@ -39,11 +39,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     searchBtn.addEventListener("click", function() {
         const gender = document.getElementById("search-gender").value;
-        const ageRange = document.getElementById("age-range").value;
+        const minAge = document.getElementById("age-min").value;
+        const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
-        
         // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
-        const searchData = { gender, ageRange, city };
+        const searchData = { gender, minAge, maxAge, city };
 
         // Redirigir a la página de resultados
         sessionStorage.setItem("searchData", JSON.stringify(searchData));
