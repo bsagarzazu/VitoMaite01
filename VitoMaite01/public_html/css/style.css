@@ -140,16 +140,27 @@ main {
 
 /* Footer */
 footer {
-    text-align: center;
-    padding: 20px;
-    background-color: white;
-    margin-top: 20px;
-    border-top: 1px solid #ddd;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+  padding: 10px 0;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-align: center;
 }
 
-footer p {
-    margin: 0;
+.footer-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  gap: 15px;  /* Espacio entre los elementos */
+}
+
+.app-icon {
+  width: 50px;  /* Ajusta el tamaño del icono */
+}
+
+.copyright, .members {
+  margin: 0;
+  font-size: 12px;
 }
