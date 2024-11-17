@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const loginBtn = document.getElementById("login-btn");
+    const mapBtn = document.getElementById("map-btn");
+    const likesBtn = document.getElementById("likes-btn");
     const logoutBtn = document.getElementById("logout-btn");
     const userInfo = document.getElementById("user-info");
     const userLogged = document.getElementById("user-logged");
@@ -35,6 +37,14 @@ document.addEventListener("DOMContentLoaded", function() {
     loginBtn.addEventListener("click", function() {
         window.location.href = "login.html";
     });
+    
+    mapBtn.addEventListener("click", function() {
+        window.location.href = "map.html";
+    });
+    
+    likesBtn.addEventListener("click", function() {
+        window.location.href = "likes.html";
+    });
 
     // Lógica de búsqueda
     const searchBtn = document.getElementById("search-btn");
@@ -44,8 +54,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
+        const hobbies = "";
+        if(sessionStorage.getItem("userLoggedIn")){
+            const hobbies = document.getElementById("hobbies").value;
+        }
         // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
-        const searchData = { gender, minAge, maxAge, city };
+        const searchData = { gender, minAge, maxAge, city, hobbies};
 
         // Redirigir a la página de resultados
         sessionStorage.setItem("searchData", JSON.stringify(searchData));
