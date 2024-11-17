@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const userGuest = document.getElementById("user-guest");
     const userAvatar = document.getElementById("user-avatar");
     const usernameSpan = document.getElementById("username");
+    const userGreeting = document.getElementById("hello-user");
     const hobbiesSection = document.getElementById("hobbies-section");
 
     // Verifica si el usuario está logueado
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
         userGuest.style.display = "none";
         userAvatar.src = user.image || "img/placeholder.png";
         usernameSpan.textContent = user.nick;
+        userGreeting.textContent = "Hola, " + user.nick;
 
         // Mostrar el botón de logout
         logoutBtn.addEventListener("click", function() {
