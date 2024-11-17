@@ -11,26 +11,25 @@
 
         <!-- Header -->
         <header>
-            <div class="logo">
-                <img src="img/logo.svg" alt="Logo" class="logo-img">
-            </div>
+            <img src="img/logo.svg" alt="Logo" class="logo-img">
             <div class="user-info" id="user-info">
                 <!-- Contenido que se muestra si el usuario está logueado -->
                 <div id="user-logged" style="display:none;">
                     <button id="map-btn">Mapa</button>
                     <button id="likes-btn">Ver Likes</button>
                     <span id="hello-user"></span>
-                    <div class="user-block">
+                    <!--<div class="user-block">
+                        <img src="" id="user-avatar" alt="Foto de perfil" class="avatar-img" onerror="this.src='img/placeholder.jpg'">-->
+                    <div class="dropdown">
                         <img src="" id="user-avatar" alt="Foto de perfil" class="avatar-img" onerror="this.src='img/placeholder.jpg'">
-                        <div class="dropdown">
-                            <span id="username"></span>
-                            <div class="dropdown-content">
-                                <button id="view-profile-btn">Ver Perfil</button>
-                                <button id="edit-profile-btn">Editar Perfil</button>
-                                <button id="logout-btn">Logout</button>
-                            </div>
+                        <span id="username"></span>
+                        <div class="dropdown-content">
+                            <button id="view-profile-btn">Ver Perfil</button>
+                            <button id="edit-profile-btn">Editar Perfil</button>
+                            <button id="logout-btn">Logout</button>
                         </div>
                     </div>
+                    <!--</div>-->
                 </div>
 
                 <!-- Contenido que se muestra si el usuario NO está logueado -->
