@@ -11,7 +11,9 @@
 
         <!-- Header -->
         <header>
-            <img src="img/vitomaite.png" alt="Logo" class="logo-img">
+            <div class="logo">
+                <img src="img/vitomaite.png" alt="Logo" class="logo-img">
+            </div>
             <div class="user-info" id="user-info">
                 <!-- Contenido que se muestra si el usuario está logueado -->
                 <div id="user-logged" style="display:none;">
@@ -19,7 +21,9 @@
                     <button id="likes-btn">Ver Likes</button>
                     <span id="hello-user"></span>
                     <div class="dropdown">
+                        <div class="user-avatar">
                             <img src="" id="user-avatar" alt="Foto de perfil" class="avatar-img" onerror="this.src='img/placeholder.jpg'">
+                        </div>
                         <span id="username"></span>
                         <div class="dropdown-content">
                             <button id="view-profile-btn">Ver Perfil</button>
@@ -31,7 +35,7 @@
 
                 <!-- Contenido que se muestra si el usuario NO está logueado -->
                 <div id="user-guest">
-                    <div class="user-avatar">
+                    <div>
                         <img src="img/placeholder.jpg" alt="Foto de perfil" class="avatar-img">
                     </div>
                     <button id="login-btn">Login</button>
