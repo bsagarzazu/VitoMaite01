@@ -4,29 +4,39 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginBtn = document.getElementById("login-btn");
 
     loginBtn.addEventListener("click", function () {
+        /*const email = document.getElementById("email").value;
+         const password = document.getElementById("password").value;
+         
+         let isValid = true;
+         let errorMessage = "";
+         
+         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+         if (!email || !emailRegex.test(email)) {
+         isValid = false;
+         errorMessage += 'Ingresa un correo válido.\n';
+         }
+         
+         if (!password) {
+         isValid = false;
+         errorMessage += 'Introduce la contraseña.\n';
+         }
+         
+         if (isValid) {
+         user = checkLogin(email, password);
+         if (user !== null) {
+         sessionStorage.setItem("userLoggedIn", JSON.stringify(user));
+         window.location.href = "index.html";
+         }
+         } else {
+         alert("Por favor ingresa un correo y una contraseña válidos.");
+         }*/
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
-
-        let isValid = true;
-        let errorMessage = "";
-
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!email || !emailRegex.test(email)) {
-            isValid = false;
-            errorMessage += 'Ingresa un correo válido.\n';
-        }
-
-        if (!password) {
-            isValid = false;
-            errorMessage += 'Introduce la contraseña.\n';
-        }
-
-        if (isValid) {
-            user = checkLogin(email, password);
-            if (user !== null) {
-                sessionStorage.setItem("userLoggedIn", JSON.stringify(user));
-                window.location.href = "index.html";
-            }
+        if (email && password) {
+            // Simular login correcto
+            const user = {email: email, nick: email.split('@')[0]}; // Simplificación
+            sessionStorage.setItem("userLoggedIn", JSON.stringify(user));
+            window.location.href = "index.html";
         } else {
             alert("Por favor ingresa un correo y una contraseña válidos.");
         }

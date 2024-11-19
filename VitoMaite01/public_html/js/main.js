@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const usernameSpan = document.getElementById("username");
     const userGreeting = document.getElementById("hello-user");
     const hobbiesSection = document.getElementById("hobbies-section");
+    const hobbiesSelect = document.getElementById("hobbies");
 
     // Verifica si el usuario está logueado
     if (sessionStorage.getItem("userLoggedIn")) {
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Mostrar el desplegable de aficiones
         hobbiesSection.style.display = "block";
+        fillHobbies(hobbiesSelect);
     } else {
         userLogged.style.display = "none";
         userGuest.style.display = "flex";
@@ -73,22 +75,34 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function getHobbies() {
+function fillHobbies(hobbiesSection) {
     let request = window.indexedDB.open("vitomaite01", 1);
 
-    let db;
     request.onsucces = (event) => {
-        db = event.target.result;
+        const db = event.target.result;
+
+        const transaction = db.transaction(['hobbies'], 'readonly');
+        const objectStore = transaction.objectStore('hobbies');
+
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsucces = function (event) {
+            const hobbies = event.target.result;
+            if (hobbies.length > 0) {
+                hobbies.forEach(function (hobby) {
+                    const option = document.createElement("option");
+                    option.value = hobby.hobbyId;
+                    option.textContent = hobby.hobbyName;
+                    hobbiesSection.appendChild(option);
+                });
+            }
+        };
+
+        getAllRequest.onerror = function (event) {
+            console.error("Error al obtener los hobbies:", event.target.error);
+        };
     };
 
-    const transaction = db.transaction(['hobbies'], 'readonly');
-    const objectStore = transaction.objectStore('hobbies');
-
-    request = objectStore.getAll();
-    request.onsucces = function (event) {
-        const hobbies = event.target.result;
-        return hobbies;
-    };
     request.onerror = (event) => {
         console.error("An error occurred during database opening: ${event.target.error?.message}");
     };
