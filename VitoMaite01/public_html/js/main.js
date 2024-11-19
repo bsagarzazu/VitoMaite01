@@ -1,5 +1,5 @@
 //BEÑAT
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const loginBtn = document.getElementById("login-btn");
     const mapBtn = document.getElementById("map-btn");
     const likesBtn = document.getElementById("likes-btn");
@@ -19,12 +19,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
         userLogged.style.display = "flex";
         userGuest.style.display = "none";
-        userAvatar.src = user.image || "img/placeholder.png";
+        userAvatar.src = user.image || "img/placeholder.jpg";
         usernameSpan.textContent = user.nick;
         userGreeting.textContent = "Hola, " + user.nick;
 
         // Mostrar el botón de logout
-        logoutBtn.addEventListener("click", function() {
+        logoutBtn.addEventListener("click", function () {
             sessionStorage.removeItem("userLoggedIn");
             window.location.reload();
         });
@@ -38,36 +38,36 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Login click
-    loginBtn.addEventListener("click", function() {
+    loginBtn.addEventListener("click", function () {
         window.location.href = "login.html";
     });
-    
-    profileBtn.addEventListener("click", function() {
+
+    profileBtn.addEventListener("click", function () {
         window.location.href = "profile.html";
     });
-    
-    mapBtn.addEventListener("click", function() {
+
+    mapBtn.addEventListener("click", function () {
         window.location.href = "map.html";
     });
-    
-    likesBtn.addEventListener("click", function() {
+
+    likesBtn.addEventListener("click", function () {
         window.location.href = "likes.html";
     });
 
     // Lógica de búsqueda
     const searchBtn = document.getElementById("search-btn");
 
-    searchBtn.addEventListener("click", function() {
+    searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
         const hobbies = "";
-        if(sessionStorage.getItem("userLoggedIn")){
+        if (sessionStorage.getItem("userLoggedIn")) {
             const hobbies = document.getElementById("hobbies").value;
         }
         // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
-        const searchData = { gender, minAge, maxAge, city, hobbies};
+        const searchData = {gender, minAge, maxAge, city, hobbies};
 
         // Redirigir a la página de resultados
         sessionStorage.setItem("searchData", JSON.stringify(searchData));
@@ -75,25 +75,29 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function fillHobbies(hobbiesSection) {
+function fillHobbies(hobbiesSelect) {
     let request = window.indexedDB.open("vitomaite01", 1);
 
-    request.onsucces = (event) => {
+    console.log("Cargando hobbies...");
+    request.onsuccess = (event) => {
         const db = event.target.result;
+
+        console.log("Conectado a IndexedDB...");
 
         const transaction = db.transaction(['hobbies'], 'readonly');
         const objectStore = transaction.objectStore('hobbies');
 
         const getAllRequest = objectStore.getAll();
 
-        getAllRequest.onsucces = function (event) {
+        getAllRequest.onsuccess = function (event) {
+            console.log("Cargado hobbies...");
             const hobbies = event.target.result;
             if (hobbies.length > 0) {
                 hobbies.forEach(function (hobby) {
                     const option = document.createElement("option");
                     option.value = hobby.hobbyId;
                     option.textContent = hobby.hobbyName;
-                    hobbiesSection.appendChild(option);
+                    hobbiesSelect.appendChild(option);
                 });
             }
         };
