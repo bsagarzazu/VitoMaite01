@@ -189,26 +189,30 @@ main {
 
 /* Footer */
 footer {
-  background-color: white;
-  padding: 35px 0;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  text-align: center;
+    background-color: white;
+    padding: 35px 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
 }
 
 .footer-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 20px;
-  gap: 15px;  /* Espacio entre los elementos */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 15px;  /* Espacio entre los elementos */
 }
 
 .copyright, .members {
-  margin: 0;
-  font-size: 12px;
+    margin: 0;
+    font-size: 12px;
 }
 
-
+/* Map */
+#map {
+    height: 500px;
+    width: 100%;
+}
