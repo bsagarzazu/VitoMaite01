@@ -34,6 +34,10 @@ header .user-info {
     position: relative;
 }
 
+header .user-logged {
+    display: none;
+}
+
 header .avatar-img {
     width: 100px;
     height: 100px;
@@ -152,6 +156,10 @@ main {
     max-width: 300px;
     border-radius: 5px;
     border: 1px solid #ddd;
+}
+
+#hobbies-section {
+    display: none;
 }
 
 .profile {

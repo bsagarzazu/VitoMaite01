@@ -1,8 +1,8 @@
 // search.js
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const searchBtn = document.getElementById("search-btn");
 
-    searchBtn.addEventListener("click", function() {
+    searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
@@ -15,12 +15,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Función para simular búsqueda de usuarios
     function searchUsers(gender, minAge, maxAge, city) {
-        // Simulación de usuarios de base de datos
-        const users = [
-            { name: "Juan", age: 25, city: "Gasteiz", photo: "https://via.placeholder.com/150" },
-            { name: "Pedro", age: 30, city: "Donostia", photo: "https://via.placeholder.com/150" },
-            { name: "Ana", age: 22, city: "Bilbo", photo: "https://via.placeholder.com/150" }
-        ];
+        const request = window.indexedDB.open("vitomaite01", 1);
+
+        request.onerror = (event) => {
+            console.error(`An error occurred during database opening: ${event.target.error?.message}`);
+        };
+
+        request.onsuccess = (event) => {
+            console.log("Database opened successfully");
+
+            const db = event.target.result;
+
+            const stores = ["users", "hobbies", "likes", "userHobby"];
+                const transaction = db.transaction(["users"], "read");
+                const objStore = transaction.objectStore("users");
+        };
 
         return users.filter(user => user.city === city && user.age >= 18 && user.age <= 35);
     }
@@ -29,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function displaySearchResults(users) {
         const resultsDiv = document.getElementById("search-results");
         resultsDiv.innerHTML = "";
-        
+
         users.forEach((user) => {
             const profileDiv = document.createElement("div");
             profileDiv.className = "profile";
