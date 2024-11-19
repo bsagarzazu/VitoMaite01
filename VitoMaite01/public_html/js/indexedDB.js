@@ -4,16 +4,24 @@ document.addEventListener("DOMContentLoaded", (event) => {
     request.onupgradeneeded = (event) => {
         const db = event.target.result;
         if (!db.objectStoreNames.contains("users")) {
-            db.createObjectStore("users", { keyPath: "email" });
+            const userObjStore = db.createObjectStore("users", { keyPath: "email" });
+            
+            userObjStore.createIndex("byEmail", "email", { unique: true });
         }
         if (!db.objectStoreNames.contains("hobbies")) {
-            db.createObjectStore("hobbies", { keyPath: "hobbyId" , autoIncrement: true});
+            const hobbyObjStore = db.createObjectStore("hobbies", { keyPath: "hobbyId" , autoIncrement: true});
+            
+            hobbyObjStore.createIndex("byHobbyId", "hobbyId", { unique: true });
         }
         if (!db.objectStoreNames.contains("likes")) {
-            db.createObjectStore("likes", { keyPath: ["email1", "email2"] });
+            const likesObjStore = db.createObjectStore("likes", { keyPath: ["email1", "email2"] });
+        
+            likesObjStore.createIndex("byEmail1", "email1", { unique: false });
         }
         if(!db.objectStoreNames.contains("userHobby")) {
-            db.createObjectStore("userHobby", {keyPath: ["userEmail", "hobbyId"]});
+            const userHobbyObjStore = db.createObjectStore("userHobby", {keyPath: ["userEmail", "hobbyId"]});
+        
+            userHobbyObjStore.createIndex("byEmail", "userEmail", { unique: false });
         }
     };
 });
