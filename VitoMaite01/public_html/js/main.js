@@ -64,11 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const city = document.getElementById("city").value;
         const hobbies = Array.from(document.getElementById("hobbies").selectedOptions).map(option => option.value);
 
-        // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
-        const searchData = {gender, minAge, maxAge, city, hobbies};
-        sessionStorage.setItem("searchData", JSON.stringify(searchData));
-
-        window.location.href = "resultados.html"; // Página de resultados
+        searchUsers(gender, minAge, maxAge, city, hobbies);
     });
 });
 
@@ -121,40 +117,91 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
             console.log("Database opened successfully");
             const db = event.target.result;
 
-            const transaction = db.transaction(["users"], "readonly");
-            const objStore = transaction.objectStore("users");
+            const transaction = db.transaction(["users", "userHobby", "hobbies"], "readonly");
+            const objStoreUsers = transaction.objectStore("users");
+            const objStoreUserHobby = transaction.objectStore("userHobby");
+            const objStoreHobbies = transaction.objectStore("hobbies");
 
             let matchingUsers = [];
 
-            const cursorRequest = objStore.openCursor();
-            cursorRequest.onsuccess = (event) => {
-                const cursor = event.target.result;
+            // Primero busca por hobbies si los hay
+            let hobbyIds = [];
+            if (hobbies.length > 0) {
+                // Obtiene los IDs de los hobbies a buscar
+                const hobbyRequests = hobbies.map(hobbyName => {
+                    return new Promise((resolve, reject) => {
+                        const hobbyRequest = objStoreHobbies.index("hobbyName").get(hobbyName); // Necesito un indice sobre el nombre
+                        hobbyRequest.onsuccess = () => {
+                            if (hobbyRequest.result) {
+                                hobbyIds.push(hobbyRequest.result.hobbyId);
+                                resolve();
+                            } else {
+                                reject(`Hobby ${hobbyName} no encontrado`);
+                            }
+                        };
+                        hobbyRequest.onerror = (event) => reject(event.target.error);
+                    });
+                });
+                // Espera a haber terminado lo anterior, sin promesas no esperaría
+                Promise.all(hobbyRequests).then(() => {
+                    // Busca correos con IDs de hobbies seleccionados
+                    let userEmails = new Set();
+                    const userHobbyRequests = hobbyIds.map(hobbyId => {
+                        return new Promise((resolve, reject) => {
+                            const index = objStoreUserHobby.index("hobbyId"); // Necesito índice sobre IDs
+                            const request = index.openCursor(IDBKeyRange.only(hobbyId));
+                            request.onsuccess = (event) => {
+                                const cursor = event.target.result;
+                                if (cursor) {
+                                    userEmails.add(cursor.value.userEmail);
+                                    cursor.continue();
+                                } else {
+                                    resolve();
+                                }
+                            };
+                            request.onerror = (event) => reject(event.target.error);
+                        });
+                    });
 
-                if (cursor) {
-                    const user = cursor.value;
+                    Promise.all(userHobbyRequests).then(() => {
+                        // Filtrar usuarios por género, edad y ciudad
+                        const userEmailsArray = Array.from(userEmails);
+                        const userRequest = objStoreUsers.index("email").openCursor();
+                        userRequest.onsuccess = (event) => {
+                            const cursor = event.target.result;
+                            if (cursor) {
+                                const user = cursor.value;
 
-                    // Aplicar los filtros
-                    const isGenderMatch = gender ? user.gender === gender : true;
-                    const isAgeMatch = user.age >= minAge && user.age <= maxAge;
-                    const isCityMatch = user.city === city;
-                    const isHobbiesMatch = hobbies.length > 0 ? hobbies.some(hobby => user.hobbies.includes(hobby)) : true;
+                                // Solo considerar usuarios cuyos emails estén en el conjunto de `userEmails`
+                                if (userEmails.has(user.email)) {
+                                    const isGenderMatch = gender ? user.gender === gender : true;
+                                    const isAgeMatch = user.age >= minAge && user.age <= maxAge;
+                                    const isCityMatch = city ? user.city === city : true;
 
-                    // Si todos los filtros coinciden, añadir el usuario a la lista
-                    if (isGenderMatch && isAgeMatch && isCityMatch && isHobbiesMatch) {
-                        matchingUsers.push(user);
-                    }
+                                    // Si todos los filtros coinciden, agregar usuario
+                                    if (isGenderMatch && isAgeMatch && isCityMatch) {
+                                        matchingUsers.push(user);
+                                    }
+                                }
 
-                    cursor.continue();
-                } else {
-                    // Cuando terminemos de recorrer los usuarios, devolvemos los usuarios encontrados
-                    resolve(matchingUsers);
-                }
-            };
+                                cursor.continue();
+                            } else {
+                                // Devuelve los resultados, los almacena en sessionStorage y redirige a resultados
+                                sessionStorage.setItem("searchResults", JSON.stringify(matchingUsers));
+                                window.location.href = "resultados.html";
+                                resolve(matchingUsers);
+                            }
+                        };
 
-            cursorRequest.onerror = (event) => {
-                console.error(`Error while iterating users: ${event.target.error?.message}`);
-                reject(event.target.error);
-            };
+                        userRequest.onerror = (event) => {
+                            console.error(`Error while iterating users: ${event.target.error?.message}`);
+                            reject(event.target.error);
+                        };
+                    }).catch(reject);
+
+                }).catch(reject);
+
+            }
         };
     });
-}
+};
