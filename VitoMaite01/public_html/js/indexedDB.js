@@ -1,3 +1,4 @@
+//ARITZ
 document.addEventListener("DOMContentLoaded", (event) => {
     const request = window.indexedDB.open("vitomaite01", 1);
          

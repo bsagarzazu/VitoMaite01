@@ -1,3 +1,4 @@
+//BEÑAT
 // login.js
 document.addEventListener("DOMContentLoaded", function () {
     const loginBtn = document.getElementById("login-btn");

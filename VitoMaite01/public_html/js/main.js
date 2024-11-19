@@ -1,3 +1,4 @@
+//BEÑAT
 document.addEventListener("DOMContentLoaded", function() {
     const loginBtn = document.getElementById("login-btn");
     const mapBtn = document.getElementById("map-btn");
