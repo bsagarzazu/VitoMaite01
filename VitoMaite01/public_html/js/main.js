@@ -62,15 +62,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
-        const hobbies = "";
-        if (sessionStorage.getItem("userLoggedIn")) {
-            const hobbies = document.getElementById("hobbies").value;
-        }
+        const hobbies = Array.from(document.getElementById("hobbies").selectedOptions).map(option => option.value);
+
         // Almacena los datos de búsqueda en el almacenamiento de sesión o pasa por URL
         const searchData = {gender, minAge, maxAge, city, hobbies};
-
-        // Redirigir a la página de resultados
         sessionStorage.setItem("searchData", JSON.stringify(searchData));
+
         window.location.href = "resultados.html"; // Página de resultados
     });
 });
@@ -110,4 +107,54 @@ function fillHobbies(hobbiesSelect) {
     request.onerror = (event) => {
         console.error("An error occurred during database opening: ${event.target.error?.message}");
     };
+}
+
+function searchUsers(gender, minAge, maxAge, city, hobbies) {
+    return new Promise((resolve, reject) => {
+        const request = window.indexedDB.open("vitomaite01", 1);
+
+        request.onerror = (event) => {
+            console.error(`An error occurred during database opening: ${event.target.error?.message}`);
+        };
+
+        request.onsuccess = (event) => {
+            console.log("Database opened successfully");
+            const db = event.target.result;
+
+            const transaction = db.transaction(["users"], "readonly");
+            const objStore = transaction.objectStore("users");
+
+            let matchingUsers = [];
+
+            const cursorRequest = objStore.openCursor();
+            cursorRequest.onsuccess = (event) => {
+                const cursor = event.target.result;
+
+                if (cursor) {
+                    const user = cursor.value;
+
+                    // Aplicar los filtros
+                    const isGenderMatch = gender ? user.gender === gender : true;
+                    const isAgeMatch = user.age >= minAge && user.age <= maxAge;
+                    const isCityMatch = user.city === city;
+                    const isHobbiesMatch = hobbies.length > 0 ? hobbies.some(hobby => user.hobbies.includes(hobby)) : true;
+
+                    // Si todos los filtros coinciden, añadir el usuario a la lista
+                    if (isGenderMatch && isAgeMatch && isCityMatch && isHobbiesMatch) {
+                        matchingUsers.push(user);
+                    }
+
+                    cursor.continue();
+                } else {
+                    // Cuando terminemos de recorrer los usuarios, devolvemos los usuarios encontrados
+                    resolve(matchingUsers);
+                }
+            };
+
+            cursorRequest.onerror = (event) => {
+                console.error(`Error while iterating users: ${event.target.error?.message}`);
+                reject(event.target.error);
+            };
+        };
+    });
 }
