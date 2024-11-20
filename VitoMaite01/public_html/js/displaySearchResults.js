@@ -77,7 +77,12 @@ function displaySearchResults(users) {
         profileDiv.appendChild(nameAgeDiv);
         
         // Show profile info when clicked
-        profileDiv.addEventListener("click", () => showProfile(user));
+        if(sessionStorage.getItem("userLoggedIn")) {
+            profileDiv.addEventListener("click", () => showProfile(user));
+        }
+        else {
+            profileDiv.addEventListener("click", () => window.location.href = "login.html");
+        }
         
         resultsDiv.appendChild(profileDiv);
     });
