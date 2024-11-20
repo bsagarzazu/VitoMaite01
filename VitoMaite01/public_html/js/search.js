@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hobbiesSection.style.display = "block";
         fillHobbies(hobbiesSelect);
     }
+    
     searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
@@ -59,10 +60,10 @@ function fillHobbies(hobbiesSelect) {
 function searchUsers(gender, minAge, maxAge, city, hobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
-        console.log("searchUsers() function");
 
         request.onerror = (event) => {
             console.error(`An error occurred during database opening: ${event.target.error?.message}`);
+            reject(event.target.error);
         };
 
         request.onsuccess = (event) => {
@@ -76,13 +77,13 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
 
             let matchingUsers = [];
 
-            // Primero busca por hobbies si los hay
-            let hobbyIds = [];
-            if (hobbies.length > 0) {
+            // Si hay hobbies -> búsqueda por hobbies
+            if (hobbies && hobbies.length > 0) {
+                let hobbyIds = [];
                 // Obtiene los IDs de los hobbies a buscar
                 const hobbyRequests = hobbies.map(hobbyName => {
                     return new Promise((resolve, reject) => {
-                        const hobbyRequest = objStoreHobbies.index("hobbyName").get(hobbyName); // Necesito un indice sobre el nombre
+                        const hobbyRequest = objStoreHobbies.index("byHobbyName").get(hobbyName); // Necesito índice sobre el nombre
                         hobbyRequest.onsuccess = () => {
                             if (hobbyRequest.result) {
                                 hobbyIds.push(hobbyRequest.result.hobbyId);
@@ -94,13 +95,14 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                         hobbyRequest.onerror = (event) => reject(event.target.error);
                     });
                 });
-                // Espera a haber terminado lo anterior, sin promesas no esperaría
+
+                // Espera a que se resuelvan todas las promesas de los hobbies
                 Promise.all(hobbyRequests).then(() => {
-                    // Busca correos con IDs de hobbies seleccionados
+                    // Busca los correos con los IDs de hobbies seleccionados
                     let userEmails = new Set();
                     const userHobbyRequests = hobbyIds.map(hobbyId => {
                         return new Promise((resolve, reject) => {
-                            const index = objStoreUserHobby.index("hobbyId"); // Necesito índice sobre IDs
+                            const index = objStoreUserHobby.index("byHobbyId"); // Necesito índice sobre el ID
                             const request = index.openCursor(IDBKeyRange.only(hobbyId));
                             request.onsuccess = (event) => {
                                 const cursor = event.target.result;
@@ -118,7 +120,7 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                     Promise.all(userHobbyRequests).then(() => {
                         // Filtrar usuarios por género, edad y ciudad
                         const userEmailsArray = Array.from(userEmails);
-                        const userRequest = objStoreUsers.index("email").openCursor();
+                        const userRequest = objStoreUsers.index("byEmail").openCursor(); // Necesito índice sobre email
                         userRequest.onsuccess = (event) => {
                             const cursor = event.target.result;
                             if (cursor) {
@@ -153,8 +155,37 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
 
                 }).catch(reject);
 
+            } else {
+                // Si no hay hobbies, buscar solo por género, edad y ciudad
+                const userRequest = objStoreUsers.index("byEmail").openCursor(); // Necesito índice sobre email
+                userRequest.onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        const user = cursor.value;
+
+                        const isGenderMatch = gender === "A" || user.gender === gender;
+                        const isAgeMatch = user.age >= minAge && user.age <= maxAge;
+                        const isCityMatch = city ? user.city === city : true;
+
+                        // Si todos los filtros coinciden, agregar usuario
+                        if (isGenderMatch && isAgeMatch && isCityMatch) {
+                            matchingUsers.push(user);
+                        }
+
+                        cursor.continue();
+                    } else {
+                        // Devuelve los resultados, los almacena en sessionStorage y redirige a resultados
+                        sessionStorage.setItem("searchResults", JSON.stringify(matchingUsers));
+                        window.location.href = "resultados.html";
+                        resolve(matchingUsers);
+                    }
+                };
+
+                userRequest.onerror = (event) => {
+                    console.error(`Error while iterating users: ${event.target.error?.message}`);
+                    reject(event.target.error);
+                };
             }
         };
     });
-}
-;
+};
