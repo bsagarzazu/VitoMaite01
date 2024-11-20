@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const userAvatar = document.getElementById("user-avatar");
     const usernameSpan = document.getElementById("username");
     const userGreeting = document.getElementById("hello-user");
-    const hobbiesSection = document.getElementById("hobbies-section");
-    const hobbiesSelect = document.getElementById("hobbies");
+    /*const hobbiesSection = document.getElementById("hobbies-section");
+    const hobbiesSelect = document.getElementById("hobbies");*/
 
     // Verifica si el usuario está logueado
     if (sessionStorage.getItem("userLoggedIn")) {
@@ -28,10 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
             sessionStorage.removeItem("userLoggedIn");
             window.location.reload();
         });
-
+/*
         // Mostrar el desplegable de aficiones
         hobbiesSection.style.display = "block";
-        fillHobbies(hobbiesSelect);
+        fillHobbies(hobbiesSelect);*/
     } else {
         userLogged.style.display = "none";
         userGuest.style.display = "flex";
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "likes.html";
     });
 
-    // Lógica de búsqueda
+    /*// Lógica de búsqueda
     const searchBtn = document.getElementById("search-btn");
 
     searchBtn.addEventListener("click", function () {
@@ -65,10 +65,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const hobbies = Array.from(document.getElementById("hobbies").selectedOptions).map(option => option.value);
 
         searchUsers(gender, minAge, maxAge, city, hobbies);
-    });
+    });*/
 });
 
-function fillHobbies(hobbiesSelect) {
+/*function fillHobbies(hobbiesSelect) {
     let request = window.indexedDB.open("vitomaite01", 1);
 
     console.log("Cargando hobbies...");
@@ -204,4 +204,4 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
             }
         };
     });
-};
+};*/
