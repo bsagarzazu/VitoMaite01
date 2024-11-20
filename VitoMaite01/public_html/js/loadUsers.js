@@ -4,22 +4,22 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     // User table data
     const users = [
-        {email: "inigo4592@gmail.com", password: "1234", nick: "Iñigo", city: "Donostia", age: 34, gender: "H", latitde: 0, longitude: 0, image: ""},
-        {email: "ane7281@gmail.com", password: "1234", nick: "Ane", city: "Vitoria", age: 26, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "jon6328@gmail.com", password: "1234", nick: "Jon", city: "Bilbo", age: 41, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "nerea9104@gmail.com", password: "1234", nick: "Nerea", city: "Donostia", age: 41, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "markel2845@gmail.com", password: "1234", nick: "Markel", city: "Vitoria", age: 50, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "amaia1738@gmail.com", password: "1234", nick: "Amaia", city: "Bilbo", age: 31, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "aitor3871@gmail.com", password: "1234", nick: "Aitor", city: "Donostia", age: 47, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "maite5824@gmail.com", password: "1234", nick: "Maite", city: "Vitoria", age: 22, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "ander4910@gmail.com", password: "1234", nick: "Ander", city: "Bilbo", age: 36, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "leire8937@gmail.com", password: "1234", nick: "Leire", city: "Donostia", age: 27, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "unai1427@gmail.com", password: "1234", nick: "Unai", city: "Vitoria", age: 60, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "miren3478@gmail.com", password: "1234", nick: "Miren", city: "Bilbo", age: 33, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "mikel2593@gmail.com", password: "1234", nick: "Mikel", city: "Donostia", age: 44, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "irati6725@gmail.com", password: "1234", nick: "Irati", city: "Vitoria", age: 21, gender: "M", latitde: 0, longitude: 0,  image: ""},
-        {email: "asier8034@gmail.com", password: "1234", nick: "Asier", city: "Bilbo", age: 39, gender: "H", latitde: 0, longitude: 0,  image: ""},
-        {email: "uxue5367@gmail.com", password: "1234", nick: "Uxue", city: "Donostia", age: 25, gender: "M", latitde: 0, longitude: 0,  image: ""}
+        {email: "inigo4592@gmail.com", password: "1234", nick: "Iñigo", city: "Donostia", age: 34, gender: "H", latitude: 43.321944, longitude: -1.975839, image: ""},
+        {email: "ane7281@gmail.com", password: "1234", nick: "Ane", city: "Vitoria", age: 26, gender: "M", latitude: 42.842256, longitude: -2.700676,  image: ""},
+        {email: "jon6328@gmail.com", password: "1234", nick: "Jon", city: "Bilbo", age: 41, gender: "H", latitude: 43.256848, longitude: -2.93627,  image: ""},
+        {email: "nerea9104@gmail.com", password: "1234", nick: "Nerea", city: "Donostia", age: 41, gender: "M", latitude: 43.314638, longitude: -1.98742,  image: ""},
+        {email: "markel2845@gmail.com", password: "1234", nick: "Markel", city: "Vitoria", age: 50, gender: "H", latitude: 42.841963, longitude: -2.700688,  image: ""},
+        {email: "amaia1738@gmail.com", password: "1234", nick: "Amaia", city: "Bilbo", age: 31, gender: "M", latitude: 43.257551, longitude: -2.936602,  image: ""},
+        {email: "aitor3871@gmail.com", password: "1234", nick: "Aitor", city: "Donostia", age: 47, gender: "H", latitude: 43.314638, longitude: -1.98742,  image: ""},
+        {email: "maite5824@gmail.com", password: "1234", nick: "Maite", city: "Vitoria", age: 22, gender: "M", latitude: 42.840546, longitude: -2.704185,  image: ""},
+        {email: "ander4910@gmail.com", password: "1234", nick: "Ander", city: "Bilbo", age: 36, gender: "H", latitude: 43.26387, longitude: -2.935798,  image: ""},
+        {email: "leire8937@gmail.com", password: "1234", nick: "Leire", city: "Donostia", age: 27, gender: "M", latitude: 43.321604, longitude: -1.994155,  image: ""},
+        {email: "unai1427@gmail.com", password: "1234", nick: "Unai", city: "Vitoria", age: 60, gender: "H", latitude: 42.849826, longitude: -2.675817,  image: ""},
+        {email: "miren3478@gmail.com", password: "1234", nick: "Miren", city: "Bilbo", age: 33, gender: "M", latitude: 43.258815, longitude: -2.92029,  image: ""},
+        {email: "mikel2593@gmail.com", password: "1234", nick: "Mikel", city: "Donostia", age: 44, gender: "H", latitude: 43.330199, longitude: -1.984586,  image: ""},
+        {email: "irati6725@gmail.com", password: "1234", nick: "Irati", city: "Vitoria", age: 21, gender: "M", latitude: 42.853561, longitude: -2.673348,  image: ""},
+        {email: "asier8034@gmail.com", password: "1234", nick: "Asier", city: "Bilbo", age: 39, gender: "H", latitude: 43.262051, longitude: -2.91973,  image: ""},
+        {email: "uxue5367@gmail.com", password: "1234", nick: "Uxue", city: "Donostia", age: 25, gender: "M", latitude: 43.31867, longitude: -1.982964,  image: ""}
     ];
 
     // Hobby table data
