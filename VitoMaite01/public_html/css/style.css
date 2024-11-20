@@ -162,31 +162,6 @@ main {
     display: none;
 }
 
-.profile {
-    width: 300px;
-    border-radius: 20px;
-    border: 2px solid #000000;
-    display: inline-block;
-    margin-right: 50px;
-    /*margin-bottom: 30px;*/
-}
-
-/* div element containing the profile picture */
-.profile .profile-img {
-    width: 100%;
-    border-bottom: 2px solid #000000;
-}
-
-.profile .profile-img img {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    width: 100%;
-}
-
-.profile #name-age .name {
-    font-weight: bold;
-}
-
 /* Footer */
 footer {
     background-color: white;
