@@ -102,7 +102,7 @@ function setImageFor(user, imgElement) {
         }
     }
     else {
-        imgElement.src = "img/icon.png";
+        imgElement.src = "img/black.png";
     }
 }
 
@@ -123,6 +123,8 @@ function showProfile(user) {
     }
     
     // TODO: establecer la imagen
+    const modalProfileImg = document.getElementById("profile-img");
+    setImageFor(user, modalProfileImg);
             
 
 

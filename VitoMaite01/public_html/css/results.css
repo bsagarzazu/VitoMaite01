@@ -6,6 +6,8 @@
     margin-right: 50px;
     margin-bottom: 30px;
     background-color: white;
+    box-sizing: border-box;
+    font-size: initial; /* Restaura el tamaño de fuente */
 }
 
 /* div element containing the profile picture */
@@ -18,6 +20,8 @@
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     width: 100%;
+    height: auto; /* Asegura proporción correcta */
+    display: block; /* Elimina espacios generados por imágenes inline */
 }
 
 .profile #name-age .name {
@@ -28,11 +32,12 @@
 
 .blurred {
     filter: blur(10px);
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 /* RESULTS */
 .result-list {
-    /* Scrolling */
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -74,6 +79,11 @@
     right: 10px;
     font-size: 24px;
     cursor: pointer;
+}
+
+.modal-profile-img {
+    border-bottom: 2px solid #000000;
+    padding-left: 20px;
 }
 
 .aficiones-modal {
