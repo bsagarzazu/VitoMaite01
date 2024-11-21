@@ -35,10 +35,10 @@ header #user-info {
 
 header #user-logged {
     display: flex;
-    flex-direction: row; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 15px; 
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
     margin-top: 10px;
 }
 
@@ -50,6 +50,7 @@ header .avatar-img {
     border: 2px solid #ddd;
 }
 /* Tengo que cambiar el dropdown */
+header #user-guest,
 header .dropdown {
     display: flex;
     flex-direction: column;
@@ -126,6 +127,15 @@ main {
     justify-content: center;
 }
 
+.login-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    flex-direction: column;
+}
+
 .search-box {
     background-color: white;
     padding: 20px;
@@ -135,10 +145,18 @@ main {
     max-width: 500px;
 }
 
+.login-box h2,
 .search-box h2 {
     margin-bottom: 20px;
     font-size: 24px;
     color: #333;
+}
+
+.login-box div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
 }
 
 .search-box div {
@@ -149,6 +167,7 @@ main {
     max-width: 300px;
 }
 
+.login-box button,
 .search-box select,
 .search-box button {
     display: block;
@@ -160,6 +179,7 @@ main {
     border: 1px solid #ddd;
 }
 
+.login-box button:hover,
 .search-box button:hover {
     background-color: #b0b0b0;
 }
