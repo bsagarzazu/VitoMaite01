@@ -1,63 +1,18 @@
 //BEÑAT
 document.addEventListener("DOMContentLoaded", function () {
-    const hobbiesSection = document.getElementById("hobbies-section");
-    const hobbiesSelect = document.getElementById("hobbies");
     const searchBtn = document.getElementById("search-btn");
-
-    if (sessionStorage.getItem("userLoggedIn")) {
-        hobbiesSection.style.display = "block";
-        fillHobbies(hobbiesSelect);
-    }
 
     searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
-        const hobbies = Array.from(document.getElementById("hobbies").selectedOptions).map(option => option.value);
 
-        searchUsers(gender, minAge, maxAge, city, hobbies);
+        searchUsers(gender, minAge, maxAge, city);
     });
 });
 
-function fillHobbies(hobbiesSelect) {
-    let request = window.indexedDB.open("vitomaite01", 1);
-
-    console.log("Cargando hobbies...");
-    request.onsuccess = (event) => {
-        const db = event.target.result;
-
-        console.log("Conectado a IndexedDB...");
-
-        const transaction = db.transaction(['hobbies'], 'readonly');
-        const objectStore = transaction.objectStore('hobbies');
-
-        const getAllRequest = objectStore.getAll();
-
-        getAllRequest.onsuccess = function (event) {
-            console.log("Cargado hobbies...");
-            const hobbies = event.target.result;
-            if (hobbies.length > 0) {
-                hobbies.forEach(function (hobby) {
-                    const option = document.createElement("option");
-                    option.value = hobby.hobbyId;
-                    option.textContent = hobby.hobbyName;
-                    hobbiesSelect.appendChild(option);
-                });
-            }
-        };
-
-        getAllRequest.onerror = function (event) {
-            console.error("Error al obtener los hobbies:", event.target.error);
-        };
-    };
-
-    request.onerror = (event) => {
-        console.error("An error occurred during database opening: ${event.target.error?.message}");
-    };
-}
-
-function searchUsers(gender, minAge, maxAge, city, hobbies) {
+function searchUsers(gender, minAge, maxAge, city) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
 
@@ -70,10 +25,8 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
             console.log("Database opened successfully");
             const db = event.target.result;
 
-            const transaction = db.transaction(["users", "userHobby", "hobbies"], "readonly");
+            const transaction = db.transaction(["users"], "readonly");
             const objStoreUsers = transaction.objectStore("users");
-            const objStoreUserHobby = transaction.objectStore("userHobby");
-            const objStoreHobbies = transaction.objectStore("hobbies");
 
             let matchingUsers = [];
 
@@ -82,9 +35,11 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                 const cursor = event.target.result;
                 if (cursor) {
                     const user = cursor.value;
-
+                    console.log(gender + "===" + user.gender);
                     const isGenderMatch = gender === "A" || user.gender === gender;
+                    console.log(minAge + "<=" + user.age + "<=" + maxAge);
                     const isAgeMatch = user.age >= minAge && user.age <= maxAge;
+                    console.log(city + "===" + user.city);
                     const isCityMatch = city ? user.city === city : true;
 
                     // Si todos los filtros coinciden, agregar usuario
