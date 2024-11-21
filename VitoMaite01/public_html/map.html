@@ -44,12 +44,16 @@
                 </div>
             </div>
         </header>
-        <div id="range-control">
-            <label for="map-range">Range: </label>
-            <input type="range" id="map-range" min="1" max="20" value="2">
-            <span id="range-value">2</span> km
+
+        <div id="location">
+            <div id="map"></div>
+            <div id="range-control">
+                <label for="map-range">Radio de búsqueda: </label>
+                <input type="range" id="map-range" min="0" max="2" step = "0.5" value="0.5">
+                <span id="range-value">0.5</span> km
+            </div>
         </div>
-        <div id="map"></div>
+
         <!-- Footer -->
         <footer>
             <div class="footer-container">
@@ -62,6 +66,6 @@
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg1Ef_2UJmZgyZk4WSKssPVlE4IZOFCtY&callback=initLoc">
         </script>
         <script src="js/main.js"></script>
-        <script src="js/location.js"></script>
+        <script src="js/map.js"></script>
     </body>
 </html>
