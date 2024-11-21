@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const userHobbyObjStore = db.createObjectStore("userHobby", {keyPath: ["userEmail", "hobbyId"]});
         
             userHobbyObjStore.createIndex("byEmail", "userEmail", { unique: false });
+            userHobbyObjStore.createIndex("byHobbyId", "hobbyId", { unique: false });
         }
     };
 });
