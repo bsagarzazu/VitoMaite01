@@ -2,13 +2,46 @@
 document.addEventListener("DOMContentLoaded", function () {
     const searchBtn = document.getElementById("search-btn");
 
+    // Prevengo que se escriba a mano
+    document.getElementById('age-min').addEventListener('keydown', function () {
+        if (![38, 40].includes(event.keyCode)) { // 38: flecha arriba, 40: flecha abajo
+        event.preventDefault();
+      }
+    });
+
+    document.getElementById('age-max').addEventListener('keydown', function () {
+      if (![38, 40].includes(event.keyCode)) { // 38: flecha arriba, 40: flecha abajo
+        event.preventDefault();
+      }
+    });
+
     searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
         const maxAge = document.getElementById("age-max").value;
         const city = document.getElementById("city").value;
 
-        searchUsers(gender, minAge, maxAge, city);
+        let formValid = true;
+        let errorMessage = "";
+
+        // Validar que los campos de género, edad y ciudad estén seleccionados
+        if (!gender) {
+            formValid = false;
+            errorMessage = "Por favor, indica el género que buscas.";
+        } else if (!minAge || !maxAge) {
+            formValid = false;
+            errorMessage = "Por favor, indica un rango de edad válido.";
+        } else if (!city) {
+            formValid = false;
+            errorMessage = "Por favor, selecciona una ciudad.";
+        }
+
+        if (!formValid) {
+            event.preventDefault();
+            alert(errorMessage); // Muestra el mensaje de error
+        } else {
+            searchUsers(gender, minAge, maxAge, city);
+        }
     });
 });
 

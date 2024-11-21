@@ -57,7 +57,7 @@ function fillHobbies(hobbiesSelect) {
 function searchUsers(gender, minAge, maxAge, city, hobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
-
+        console.log(hobbies);
         request.onerror = (event) => {
             console.error(`An error occurred during database opening: ${event.target.error?.message}`);
             reject(event.target.error);
@@ -76,7 +76,7 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
             // Si hay hobbies -> búsqueda por hobbies
             if (hobbies && hobbies.length > 0) {
                 let userEmails = new Set();
-
+                
                 // Para cada hobbyId en la lista de hobbies, buscar los usuarios que tienen ese hobby
                 const userHobbyRequests = hobbies.map(hobbyId => {
                     return new Promise((resolve, reject) => {
@@ -123,7 +123,7 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                         } else {
                             // Devuelve los resultados, los almacena en sessionStorage y redirige a resultados
                             sessionStorage.setItem("searchResults", JSON.stringify(matchingUsers));
-                            window.location.href = "resultados.html";
+                            //window.location.href = "resultados.html";
                             resolve(matchingUsers);
                         }
                     };
