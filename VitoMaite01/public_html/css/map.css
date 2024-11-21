@@ -1,9 +1,22 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
-*/
-/* 
-    Created on : 20 nov 2024, 13:04:02
-    Author     : sagar
-*/
+        #map {
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
 
+        /* Styling the range control box */
+        #range-control {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        /* Range slider styling */
+        #map-range {
+            width: 150px;
+        }
