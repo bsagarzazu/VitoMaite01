@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             const hobbyObjStore = db.createObjectStore("hobbies", { keyPath: "hobbyId" , autoIncrement: true});
             
             hobbyObjStore.createIndex("byHobbyId", "hobbyId", { unique: true });
-            hobbyObjStore.createIndex("byHobbyName", "hobbyName", { unique: true });
         }
         if (!db.objectStoreNames.contains("likes")) {
             const likesObjStore = db.createObjectStore("likes", { keyPath: ["email1", "email2"] });
