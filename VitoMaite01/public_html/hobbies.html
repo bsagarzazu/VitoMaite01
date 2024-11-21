@@ -74,7 +74,14 @@
                             <option value="Donostia">Donostia</option>
                             <option value="Bilbo">Bilbo</option>
                         </select>
-                        
+
+                        <div id="hobbies-section">
+                            <label for="hobbies">Aficiones</label>
+                            <select id="hobbies" multiple>
+                                <!-- Las aficiones se llenarán dinámicamente con JS -->
+                            </select>
+                        </div>
+
                         <button type="button" id="search-btn">Buscar</button>
                     </form>
                 </div>
@@ -92,6 +99,6 @@
         <script src="js/indexedDB.js"></script>
         <script src="js/loadUsers.js"></script>
         <script src="js/main.js"></script>
-        <script src="js/search.js"></script>
+        <script src="js/searchHobbies.js"></script>
     </body>
 </html>

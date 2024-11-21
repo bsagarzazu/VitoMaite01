@@ -1,17 +1,19 @@
 let map;
 let userMarker;
-let radius = 2000; // 2 km en metros
+let radius = 2000; // 2 km in meters
+let markers = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     const rangeInput = document.getElementById("map-range");
     const valueDisplay = document.getElementById("range-value");
-    
+
+    // Update the radius when the input slider changes
     rangeInput.addEventListener("input", function () {
-        radius = rangeInput.value * 1000; // a metros
+        radius = rangeInput.value * 1000; // Convert from kilometers to meters
         valueDisplay.textContent = rangeInput.value;
         initLoc();
     });
-    
+
     initLoc();
 });
 
@@ -23,46 +25,69 @@ function initLoc() {
             initMap(latitude, longitude);
         },
                 (error) => {
-            alert("Error al obtener la ubicación: " + error.message);
+            alert("Activa la ubicación para poder utilizar el servicio");
         }
         );
     } else {
         alert("Geolocalización no soportada por este navegador.");
     }
-};
+}
 
-// Marcadores de ejemplo (latitud y longitud)
-const markers = [
-    {lat: 42.8616922, lng: -2.7380206, name: "Aligobeo"}, // Fuera de 2 km 
-    {lat: 42.8412704, lng: -2.6762743, name: "Parque de la Florida"}, // Dentro de 2 km
-    {lat: 42.8403004, lng: -2.6845562, name: "Estadio de Mendizorrotza"}, // Dentro de 2 km
-    {lat: 42.8501865, lng: -2.6433496, name: "Elorriaga"} // Fuera de 2 km
-];
+function getMarkers() {
+    const request = indexedDB.open("vitomaite01", 1);
 
-// Función para inicializar el mapa
+    request.onsuccess = function (event) {
+        const db = event.target.result;
+        const transaction = db.transaction("users", "readonly");
+        const objectStore = transaction.objectStore("users");
+
+        const query = objectStore.getAll();
+
+        query.onsuccess = function (event) {
+            const users = event.target.result;
+
+            markers = users.map(user => ({
+                    lat: user.latitude,
+                    lng: user.longitude,
+                    name: `${user.nick}, ${user.age}`
+                }));
+
+            console.log(markers.length + " markers loaded.");
+        };
+
+        query.onerror = function (event) {
+            console.log("Error al obtener los usuarios:", event.target.error);
+        };
+    };
+
+    request.onerror = function (event) {
+        console.log("Error al abrir la base de datos:", event.target.error);
+    };
+}
+
 function initMap(lat, lng) {
     const userLocation = {lat, lng};
 
-    // Crear el mapa
+    // Create the map
     map = new google.maps.Map(document.getElementById("map"), {
         center: userLocation,
         zoom: 14
     });
 
-    // Agregar marcador del usuario
+    // Add the user marker
     userMarker = new google.maps.Marker({
         position: userLocation,
         map: map,
         title: "Tu ubicación",
         icon: {
-            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         }
     });
 
-    // Dibujar círculo alrededor de la ubicación del usuario
+    // Draw a circle around the user's location
     const userCircle = new google.maps.Circle({
         map: map,
-        radius: radius, // Radio en metros
+        radius: radius, // Radius in meters
         fillColor: "#AA0000",
         fillOpacity: 0.2,
         strokeColor: "#AA0000",
@@ -70,13 +95,13 @@ function initMap(lat, lng) {
     });
     userCircle.setCenter(userLocation);
 
-    // Mostrar marcadores dentro del radio
+    // Show markers within the radius
     showMarkersInRadius(userLocation);
 }
 
-// Calcular distancia entre dos coordenadas (Haversine formula)
+// Calculate distance between two coordinates (Haversine formula)
 function calculateDistance(lat1, lng1, lat2, lng2) {
-    const R = 6371e3; // Radio de la Tierra en metros
+    const R = 6371e3; // Radius of the Earth in meters
     const φ1 = (lat1 * Math.PI) / 180;
     const φ2 = (lat2 * Math.PI) / 180;
     const Δφ = ((lat2 - lat1) * Math.PI) / 180;
@@ -87,10 +112,10 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
             Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    return R * c; // Distancia en metros
+    return R * c; // Distance in meters
 }
 
-// Mostrar marcadores dentro del radio
+// Show markers within the radius
 function showMarkersInRadius(userLocation) {
     markers.forEach((marker) => {
         const distance = calculateDistance(
@@ -101,6 +126,7 @@ function showMarkersInRadius(userLocation) {
                 );
 
         if (distance <= radius) {
+            // Create a new marker for users within the radius
             new google.maps.Marker({
                 position: {lat: marker.lat, lng: marker.lng},
                 map: map,
@@ -109,59 +135,3 @@ function showMarkersInRadius(userLocation) {
         }
     });
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const loginBtn = document.getElementById("login-btn");
-    const mapBtn = document.getElementById("map-btn");
-    const likesBtn = document.getElementById("likes-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    const profileBtn = document.getElementById("view-profile-btn");
-    const userInfo = document.getElementById("user-info");
-    const userLogged = document.getElementById("user-logged");
-    const userGuest = document.getElementById("user-guest");
-    const userAvatar = document.getElementById("user-avatar");
-    const usernameSpan = document.getElementById("username");
-    const userGreeting = document.getElementById("hello-user");
-    const hobbiesSection = document.getElementById("hobbies-section");
-    const hobbiesSelect = document.getElementById("hobbies");
-
-    // Verifica si el usuario está logueado
-    if (sessionStorage.getItem("userLoggedIn")) {
-        const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-        userLogged.style.display = "flex";
-        userGuest.style.display = "none";
-        userAvatar.src = user.image || "img/placeholder.jpg";
-        usernameSpan.textContent = user.nick;
-        userGreeting.textContent = "Hola, " + user.nick;
-
-        // Mostrar el botón de logout
-        logoutBtn.addEventListener("click", function () {
-            sessionStorage.removeItem("userLoggedIn");
-            window.location.reload();
-        });
-
-        // Mostrar el desplegable de aficiones
-        hobbiesSection.style.display = "block";
-        fillHobbies(hobbiesSelect);
-    } else {
-        userLogged.style.display = "none";
-        userGuest.style.display = "flex";
-    }
-
-    // Login click
-    loginBtn.addEventListener("click", function () {
-        window.location.href = "login.html";
-    });
-
-    profileBtn.addEventListener("click", function () {
-        window.location.href = "profile.html";
-    });
-
-    mapBtn.addEventListener("click", function () {
-        window.location.href = "map.html";
-    });
-
-    likesBtn.addEventListener("click", function () {
-        window.location.href = "likes.html";
-    });
-});

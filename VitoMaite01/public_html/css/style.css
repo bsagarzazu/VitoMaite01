@@ -154,10 +154,6 @@ main {
     border: 1px solid #ddd;
 }
 
-#hobbies-section {
-    display: none;
-}
-
 /* Footer */
 footer {
     background-color: white;

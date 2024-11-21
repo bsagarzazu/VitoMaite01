@@ -18,7 +18,8 @@
             <div class="user-info" id="user-info">
                 <!-- Contenido que se muestra si el usuario está logueado -->
                 <div id="user-logged">
-                    <button id="map-btn">Mapa</button>
+                    <button id="hobbies-btn">Búsqueda por aficiones</button>
+                    <button id="map-btn">Búsqueda por geolocalización</button>
                     <button id="likes-btn">Ver Likes</button>
                     <span id="hello-user"></span>
                     <div class="dropdown">
@@ -43,10 +44,10 @@
                 </div>
             </div>
         </header>
-            
-            <div id="map"></div>
-            <input type="range" id="map-range" name="distancia" min="0" max="100" value="50">
-            <p>Rango de: <span id="range-value">50</span> km</p>
+
+        <div id="map"></div>
+        <input type="range" id="map-range" name="distancia" min="0" max="100" value="50">
+        <p>Rango de: <span id="range-value">50</span> km</p>
         <!-- Footer -->
         <footer>
             <div class="footer-container">
@@ -55,7 +56,11 @@
             </div>
         </footer>
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg1Ef_2UJmZgyZk4WSKssPVlE4IZOFCtY"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg1Ef_2UJmZgyZk4WSKssPVlE4IZOFCtY&callback=initLoc">
+        </script>
+
+        <script src="js/main.js"></script>
         <script src="js/location.js"></script>
     </body>
 </html>

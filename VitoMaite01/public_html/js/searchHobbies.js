@@ -4,11 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const hobbiesSelect = document.getElementById("hobbies");
     const searchBtn = document.getElementById("search-btn");
 
-    if (sessionStorage.getItem("userLoggedIn")) {
-        hobbiesSection.style.display = "block";
-        fillHobbies(hobbiesSelect);
-    }
-
+    fillHobbies(hobbiesSelect);
+    
     searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
