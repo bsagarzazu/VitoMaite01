@@ -52,7 +52,7 @@ function displaySearchResults(users) {
         const nameAgeDiv = document.createElement("div");
         nameAgeDiv.id = "name-age";
         const nameAgePara = document.createElement("p");
-        nameAgePara.innerHTML = `<span class="name">${user.nick}</span>  ${user.age}`;
+        nameAgePara.innerHTML = `&nbsp<span class="name">   ${user.nick}</span>  ${user.age}`;
         nameAgeDiv.appendChild(nameAgePara);
         
         // Añadirlo todo al perfil
@@ -71,22 +71,14 @@ function displaySearchResults(users) {
     });
 }
 
-/**function getImageFor(user) {
-    if(!sessionStorage.getItem("userLoggedIn")) {
-        // Devolver una imagen difuminada si tiene imagen, si no en negro
-        return user.image ? blurredImage(user.image) : "img/black.png";
-    }
-    return user.image ? decodeImage(user.image) : "img/black.png";
-}**/
-
 function setImageFor(user, imgElement) {
     if(user.image) {
         if(!sessionStorage.getItem("userLoggedIn")) {
-            imgElement.src = user.image;
+            imgElement.src = "data:image/png;base64," + user.image;
             imgElement.className = "blurred";
         }
         else {
-            imgElement.src = user.image;
+            imgElement.src = "data:image/png;base64," + user.image;
         }
     }
     else {
