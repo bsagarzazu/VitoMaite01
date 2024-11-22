@@ -22,6 +22,9 @@ header {
     z-index: 1000;
 }
 
+header .logo {
+    cursor: pointer; 
+}
 header .logo-img {
     height: 120px;
 }

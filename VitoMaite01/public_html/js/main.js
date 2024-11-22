@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Mostrar el botón de logout
         logoutBtn.addEventListener("click", function () {
             sessionStorage.removeItem("userLoggedIn");
-            window.location.reload();
+            window.location.href = "index.html";
         });
     } else {
         userLogged.style.display = "none";
