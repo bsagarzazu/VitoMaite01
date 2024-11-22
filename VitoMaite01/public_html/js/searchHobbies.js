@@ -136,8 +136,9 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
 
                 Promise.all(userHobbyRequests).then(() => {
                     console.log("User Emails collected:", Array.from(userEmails));
-
-                    const userRequest = objStoreUsers.index("byEmail").openCursor();
+                    
+                    const index = objStoreUsers.index("byEmail");
+                    const userRequest = index.openCursor();
                     userRequest.onsuccess = (event) => {
                         const cursor = event.target.result;
                         if (cursor) {
