@@ -1,7 +1,8 @@
 let map;
 let userMarker;
-let radius = 2000; // 2 km in meters
-let markers = [];
+let radius = 500; // 2 km in meters
+let markers = []; // Array to store map markers (Google Maps markers)
+let mapMarkers = []; // Array to store Google Maps Marker objects
 
 document.addEventListener("DOMContentLoaded", function () {
     const rangeInput = document.getElementById("map-range");
@@ -20,13 +21,13 @@ document.addEventListener("DOMContentLoaded", function () {
 function initLoc() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-                (position) => {
-            const {latitude, longitude} = position.coords;
-            initMap(latitude, longitude);
-        },
-                (error) => {
-            alert("Activa la ubicación para poder utilizar el servicio");
-        }
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                initMap(latitude, longitude);
+            },
+            (error) => {
+                alert("Activa la ubicación para poder utilizar el servicio");
+            }
         );
     } else {
         alert("Geolocalización no soportada por este navegador.");
@@ -47,12 +48,16 @@ function getMarkers() {
             const users = event.target.result;
 
             markers = users.map(user => ({
-                    lat: user.latitude,
-                    lng: user.longitude,
-                    name: `${user.nick}, ${user.age}`
-                }));
+                lat: user.latitude,
+                lng: user.longitude,
+                name: `${user.nick}, ${user.age}`
+            }));
 
             console.log(markers.length + " markers loaded.");
+            // Show markers in the radius after loading
+            if (map) {
+                showMarkersInRadius({ lat: map.getCenter().lat(), lng: map.getCenter().lng() });
+            }
         };
 
         query.onerror = function (event) {
@@ -66,7 +71,7 @@ function getMarkers() {
 }
 
 function initMap(lat, lng) {
-    const userLocation = {lat, lng};
+    const userLocation = { lat, lng };
 
     // Create the map
     map = new google.maps.Map(document.getElementById("map"), {
@@ -95,8 +100,8 @@ function initMap(lat, lng) {
     });
     userCircle.setCenter(userLocation);
 
-    // Show markers within the radius
-    showMarkersInRadius(userLocation);
+    // Get and display markers after initializing the map
+    getMarkers();
 }
 
 // Calculate distance between two coordinates (Haversine formula)
@@ -108,8 +113,8 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
     const Δλ = ((lng2 - lng1) * Math.PI) / 180;
 
     const a =
-            Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+        Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c; // Distance in meters
@@ -117,21 +122,28 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 
 // Show markers within the radius
 function showMarkersInRadius(userLocation) {
+    // Remove old markers from the map
+    mapMarkers.forEach(marker => marker.setMap(null));
+    mapMarkers = []; // Reset array of map markers
+
     markers.forEach((marker) => {
         const distance = calculateDistance(
-                userLocation.lat,
-                userLocation.lng,
-                marker.lat,
-                marker.lng
-                );
+            userLocation.lat,
+            userLocation.lng,
+            marker.lat,
+            marker.lng
+        );
 
         if (distance <= radius) {
             // Create a new marker for users within the radius
-            new google.maps.Marker({
-                position: {lat: marker.lat, lng: marker.lng},
+            const newMarker = new google.maps.Marker({
+                position: { lat: marker.lat, lng: marker.lng },
                 map: map,
                 title: marker.name
             });
+
+            // Store the marker to remove later if needed
+            mapMarkers.push(newMarker);
         }
     });
 }

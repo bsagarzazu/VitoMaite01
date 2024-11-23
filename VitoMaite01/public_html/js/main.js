@@ -32,8 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         userLogged.style.display = "none";
         userGuest.style.display = "flex";
     }
-
-    // Login click
+    
     loginBtn.addEventListener("click", function () {
         window.location.href = "login.html";
     });
