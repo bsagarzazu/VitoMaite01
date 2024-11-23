@@ -112,11 +112,11 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                 const userHobbyRequests = hobbies.map(hobbyId => {
                     return new Promise((resolve, reject) => {
                         const index = objStoreUserHobby.index("byHobbyId");
-                        const request = index.openCursor();
-
+                        const hobby = parseInt(hobbyId); // Esto ha costado horas y horas
+                        const request = index.openCursor(IDBKeyRange.only(hobby));
                         request.onsuccess = (event) => {
                             const cursor = event.target.result;
-                            console.log(`Searching for hobbyId: ${hobbyId}, Cursor:`, cursor);
+                            console.log(`Searching for hobbyId: ${hobby}, Cursor:`, cursor);
                             if (cursor) {
                                 console.log(`Found user email: ${cursor.value.userEmail}`);
                                 userEmails.add(cursor.value.userEmail);
@@ -137,7 +137,8 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                 Promise.all(userHobbyRequests).then(() => {
                     console.log("User Emails collected:", Array.from(userEmails));
 
-                    const userRequest = objStoreUsers.index("byEmail").openCursor();
+                    const index = objStoreUsers.index("byEmail");
+                    const userRequest = index.openCursor();
                     userRequest.onsuccess = (event) => {
                         const cursor = event.target.result;
                         if (cursor) {
@@ -156,6 +157,7 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                             cursor.continue();
                         } else {
                             sessionStorage.setItem("searchResults", JSON.stringify(matchingUsers));
+                            window.location.href = "resultados.html";
                             resolve(matchingUsers);
                         }
                     };
@@ -183,6 +185,7 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                         cursor.continue();
                     } else {
                         sessionStorage.setItem("searchResults", JSON.stringify(matchingUsers));
+                        window.location.href = "resultados.html";
                         resolve(matchingUsers);
                     }
                 };
