@@ -75,10 +75,10 @@ function searchUsers(gender, minAge, maxAge, city) {
                     console.log(city + "===" + user.city);
                     const isCityMatch = city ? user.city === city : true;
                     
-                    const isMe = false;
+                    let isMe = false;
                     if (sessionStorage.getItem("userLoggedIn")) {
                         const me = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-                        const isMe = user.email ===  me.email;
+                        isMe = user.email ===  me.email;
                     }
                     
                     // Si todos los filtros coinciden, agregar usuario

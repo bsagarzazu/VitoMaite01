@@ -149,10 +149,10 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                                 const isAgeMatch = user.age >= minAge && user.age <= maxAge;
                                 const isCityMatch = city ? user.city === city : true;
 
-                                const isMe = false;
+                                let isMe = false;
                                 if (sessionStorage.getItem("userLoggedIn")) {
                                     const me = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-                                    const isMe = user.email === me.email;
+                                    isMe = user.email === me.email;
                                 }
 
                                 if (isGenderMatch && isAgeMatch && isCityMatch && !isMe) {
@@ -184,10 +184,10 @@ function searchUsers(gender, minAge, maxAge, city, hobbies) {
                         const isAgeMatch = user.age >= minAge && user.age <= maxAge;
                         const isCityMatch = city ? user.city === city : true;
 
-                        const isMe = false;
+                        let isMe = false;
                         if (sessionStorage.getItem("userLoggedIn")) {
                             const me = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-                            const isMe = user.email === me.email;
+                            isMe = user.email === me.email;
                         }
 
                         if (isGenderMatch && isAgeMatch && isCityMatch && !isMe) {
