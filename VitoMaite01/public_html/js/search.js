@@ -74,9 +74,15 @@ function searchUsers(gender, minAge, maxAge, city) {
                     const isAgeMatch = user.age >= minAge && user.age <= maxAge;
                     console.log(city + "===" + user.city);
                     const isCityMatch = city ? user.city === city : true;
-
+                    
+                    const isMe = false;
+                    if (sessionStorage.getItem("userLoggedIn")) {
+                        const me = JSON.parse(sessionStorage.getItem("userLoggedIn"));
+                        const isMe = user.email ===  me.email;
+                    }
+                    
                     // Si todos los filtros coinciden, agregar usuario
-                    if (isGenderMatch && isAgeMatch && isCityMatch) {
+                    if (isGenderMatch && isAgeMatch && isCityMatch && !isMe) {
                         matchingUsers.push(user);
                     }
 
