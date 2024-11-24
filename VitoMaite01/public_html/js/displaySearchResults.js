@@ -23,52 +23,68 @@ document.addEventListener("DOMContentLoaded", (event) => {
 function displaySearchResults(users) {
     const resultsDiv = document.getElementById("result-list");
     resultsDiv.innerHTML = "";
+    
+    if(users.length === 0) {
+        // Si no hay usuarios mostrar un mensaje
+        resultsDiv.className = "no-result-list";
+        
+        const lbl = document.createElement("label");
+        lbl.className = "no-results";
+        lbl.textContent = "NO HAY RESULTADOS";
+        resultsDiv.appendChild(lbl);
+        
+        const image = document.createElement("img");
+        image.className = "no-result-img";
+        image.src = "img/broken_heart.png";
+        resultsDiv.appendChild(image);
+    }
+    else {
+        users.forEach((user) => {
+            const profileDiv = document.createElement("div");
+            profileDiv.className = "profile";
+            // TODO: display the actual image
 
-    users.forEach((user) => {
-        const profileDiv = document.createElement("div");
-        profileDiv.className = "profile";
-        // TODO: display the actual image
-        
-        /**const usrImage = getImageFor(user);
-        
-        profileDiv.innerHTML = `
-            <div class="profile-img">
-                <img src="img/icon.png">
-            </div>
-            <div id="name-age">
-                <p><span class="name">${user.nick}</span>  ${user.age}</p>
-            </div>
-        `;*/
-        
-        // Imagen de usuario
-        const profileImageDiv = document.createElement("div");
-        profileImageDiv.className = "profile-img";
-        
-        const imgElement = document.createElement("img");
-        setImageFor(user, imgElement);
-        profileImageDiv.appendChild(imgElement);
-        
-        // Bloque de nombre y edad
-        const nameAgeDiv = document.createElement("div");
-        nameAgeDiv.id = "name-age";
-        const nameAgePara = document.createElement("p");
-        nameAgePara.innerHTML = `&nbsp<span class="name">   ${user.nick}</span>  ${user.age}`;
-        nameAgeDiv.appendChild(nameAgePara);
-        
-        // Añadirlo todo al perfil
-        profileDiv.appendChild(profileImageDiv);
-        profileDiv.appendChild(nameAgeDiv);
-        
-        // Show profile info when clicked
-        if(sessionStorage.getItem("userLoggedIn")) {
-            profileDiv.addEventListener("click", () => showProfile(user));
-        }
-        else {
-            profileDiv.addEventListener("click", () => window.location.href = "login.html");
-        }
-        
-        resultsDiv.appendChild(profileDiv);
-    });
+            /**const usrImage = getImageFor(user);
+
+            profileDiv.innerHTML = `
+                <div class="profile-img">
+                    <img src="img/icon.png">
+                </div>
+                <div id="name-age">
+                    <p><span class="name">${user.nick}</span>  ${user.age}</p>
+                </div>
+            `;*/
+
+            // Imagen de usuario
+            const profileImageDiv = document.createElement("div");
+            profileImageDiv.className = "profile-img";
+
+            const imgElement = document.createElement("img");
+            setImageFor(user, imgElement);
+            profileImageDiv.appendChild(imgElement);
+
+            // Bloque de nombre y edad
+            const nameAgeDiv = document.createElement("div");
+            nameAgeDiv.id = "name-age";
+            const nameAgePara = document.createElement("p");
+            nameAgePara.innerHTML = `&nbsp<span class="name">   ${user.nick}</span>  ${user.age}`;
+            nameAgeDiv.appendChild(nameAgePara);
+
+            // Añadirlo todo al perfil
+            profileDiv.appendChild(profileImageDiv);
+            profileDiv.appendChild(nameAgeDiv);
+
+            // Show profile info when clicked
+            if(sessionStorage.getItem("userLoggedIn")) {
+                profileDiv.addEventListener("click", () => showProfile(user));
+            }
+            else {
+                profileDiv.addEventListener("click", () => window.location.href = "login.html");
+            }
+
+            resultsDiv.appendChild(profileDiv);
+        });
+    }
 }
 
 function setImageFor(user, imgElement) {
