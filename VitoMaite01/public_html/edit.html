@@ -43,27 +43,34 @@
         <main>
             <div id="profile-info">
                 <h2>Modificar Perfil</h2>
-                <img src="" id="profile-photo" alt="Foto de perfil" class="edit-profile-content">
-                <input type="file" id="profile-photo-input" accept="image/*" style="display:none">
-                <p id="profile-city">Ciudad: </p>
-                <select id="city" required>
-                    <option value="Gasteiz">Gasteiz</option>
-                    <option value="Donostia">Donostia</option>
-                    <option value="Bilbo">Bilbo</option>
+                <!-- Modificar Foto -->
+                <div class="image-container" id="profileImageContainer">
+                    <span id="imagePreviewText">Arrastra una imagen o selecciona desde el archivo</span>
+                </div>
+                <input type="file" class="file-input" id="profileImageInput" accept="image/*">
+                <div>
+                    <!-- Modificar Ciudad -->
+                    <label for="city">Ciudad:</label>
+                    <input type="text" id="city" placeholder="Ingresa tu ciudad">
+                </div>
+
+                <h3>Aficiones</h3>
+
+                <!-- Eliminar Aficiones -->
+                <h4>Eliminar Aficiones</h4>
+                <select id="deleteHobbySelect" multiple size="5">
+                    <!-- Aquí se cargarán las aficiones del usuario -->
                 </select>
+                <button id="deleteHobbiesBtn">Eliminar Aficiones</button>
+
+                <!-- Añadir Aficiones -->
+                <h4>Añadir Aficiones</h4>
+                <select id="addHobbySelect" multiple size="5">
+                    <!-- Aquí se cargarán las aficiones disponibles -->
+                </select>
+                <button id="addHobbiesBtn">Añadir Aficiones</button>
                 <div>
-                    <button id="accept-btn">Aceptar</button>
-                </div>
-                <div id="hobbies-section">
-                    <p id="profile-hobbies">Aficiones: </p>
-                    <label for="hobbies">Aficiones</label>
-                    <select id="hobbies" multiple>
-                        <!-- Las aficiones se llenarán dinámicamente con JS -->
-                    </select>
-                </div>
-                <div>
-                    <button id="add-hobbies-btn">Añadir Aficiones</button>
-                    <button id="delete-hobbies-btn">Eliminar Aficiones</button>
+                    <button id="acceptChangesBtn">Aceptar</button>
                 </div>
             </div>
         </main>
