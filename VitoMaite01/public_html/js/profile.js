@@ -14,12 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Faltan datos del usuario.");
     }
 
-    // Configurar el botón de edición del perfil
-    const editBtn = document.getElementById("edit-profile-btn");
-    editBtn.addEventListener("click", function () {
-        window.location.href = "edit.html";
-    });
-
     // Función para actualizar el perfil con la información del usuario
     async function updateProfile(user) {
         console.log("Actualizando perfil con:", user);
