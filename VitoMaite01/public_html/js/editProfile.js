@@ -1,5 +1,6 @@
 //YUYUAN
 //editProfile.js
+//modificar los datos
 document.addEventListener("DOMContentLoaded", () => {
     const dbRequest = window.indexedDB.open("vitomaite01", 1);
 
@@ -7,10 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileImageContainer = document.getElementById("profileImageContainer");
     const profileImageInput = document.getElementById("profileImageInput");
     const citySelect = document.getElementById("city");
-    const deleteHobbySelect = document.getElementById("deleteHobbySelect");
-    const addHobbySelect = document.getElementById("addHobbySelect");
-    const deleteHobbiesBtn = document.getElementById("deleteHobbiesBtn");
-    const addHobbiesBtn = document.getElementById("addHobbiesBtn");
     const acceptChangesBtn = document.getElementById("acceptChangesBtn");
 
     let db;
@@ -18,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dbRequest.onsuccess = (event) => {
         db = event.target.result;
         loadUserProfile(); // Cargar los datos del perfil
-        loadHobbies(); // Cargar las aficiones
     };
 
     // Si la base de datos necesita ser actualizada (primer uso)
@@ -28,9 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Función para cargar los datos de perfil
     function loadUserProfile() {
-        const transaction = db.transaction(["users", "userHobby"], "readonly");
+        const transaction = db.transaction(["users"], "readonly");
         const usersStore = transaction.objectStore("users");
-        const userHobbyStore = transaction.objectStore("userHobby");
 
         const userRequest = usersStore.get("user@example.com"); // Asume que el email es 'user@example.com'
 
@@ -48,46 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Mostrar ciudad actual en el select
                 citySelect.value = user.city || "";
             }
-        };
-    }
-
-    // Función para cargar las aficiones del usuario
-    function loadHobbies() {
-        const transaction = db.transaction(["hobbies", "userHobby"], "readonly");
-        const hobbyStore = transaction.objectStore("hobbies");
-        const userHobbyStore = transaction.objectStore("userHobby");
-
-        const hobbyRequest = hobbyStore.getAll();
-        hobbyRequest.onsuccess = () => {
-            const allHobbies = hobbyRequest.result;
-            const userHobbies = [];
-
-            // Obtener las aficiones del usuario
-            const userHobbyRequest = userHobbyStore.index("byEmail").getAll("user@example.com"); // Asume que el email es 'user@example.com'
-            userHobbyRequest.onsuccess = () => {
-                const userHobbyList = userHobbyRequest.result;
-                userHobbyList.forEach(item => {
-                    userHobbies.push(item.hobbyId);
-                });
-
-                // Poner las aficiones disponibles en el "Añadir"
-                allHobbies.forEach(hobby => {
-                    if (!userHobbies.includes(hobby.hobbyId)) {
-                        const option = document.createElement("option");
-                        option.value = hobby.hobbyId;
-                        option.textContent = hobby.name;
-                        addHobbySelect.appendChild(option);
-                    }
-                });
-
-                // Poner las aficiones del usuario en el "Eliminar"
-                userHobbyList.forEach(item => {
-                    const option = document.createElement("option");
-                    option.value = item.hobbyId;
-                    option.textContent = `Hobby: ${item.hobbyId}`; // Puedes cambiar esto por el nombre de la afición
-                    deleteHobbySelect.appendChild(option);
-                });
-            };
         };
     }
 
@@ -140,23 +95,89 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Manejo de la carga de imagen
-    document.getElementById('profileImageInput').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const image = new Image();
-                image.src = e.target.result;
-                image.onload = function () {
-                    const container = document.getElementById('profileImageContainer');
-                    container.innerHTML = ''; // Limpiar el contenedor
-                    container.appendChild(image); // Agregar la imagen cargada
-                }
+    // Función para aceptar los cambios
+    acceptChangesBtn.addEventListener("click", () => {
+        const newCity = citySelect.value;
+        const transaction = db.transaction(["users"], "readwrite");
+        const usersStore = transaction.objectStore("users");
+
+        const userRequest = usersStore.get("user@example.com");
+
+        userRequest.onsuccess = () => {
+            const user = userRequest.result;
+            if (user) {
+                user.city = newCity; // Actualizar la ciudad
+                const updateRequest = usersStore.put(user);
+                updateRequest.onsuccess = () => {
+                    alert("Cambios guardados exitosamente.");
+                    window.location.href = "profile.html"; // Redirigir al perfil
+                };
             }
-            reader.readAsDataURL(file);
-        }
+        };
     });
+});
+
+//modificar las aficiones
+document.addEventListener("DOMContentLoaded", () => {
+    const dbRequest = window.indexedDB.open("vitomaite01", 1);
+
+    // Variables para interactuar con los elementos HTML
+    const deleteHobbySelect = document.getElementById("deleteHobbySelect");
+    const addHobbySelect = document.getElementById("addHobbySelect");
+    const deleteHobbiesBtn = document.getElementById("deleteHobbiesBtn");
+    const addHobbiesBtn = document.getElementById("addHobbiesBtn");
+
+    let db;
+
+    dbRequest.onsuccess = (event) => {
+        db = event.target.result;
+        loadHobbies(); // Cargar las aficiones
+    };
+
+    // Si la base de datos necesita ser actualizada (primer uso)
+    dbRequest.onupgradeneeded = (event) => {
+        db = event.target.result;
+    };
+
+    // Función para cargar las aficiones del usuario
+    function loadHobbies() {
+        const transaction = db.transaction(["hobbies", "userHobby"], "readonly");
+        const hobbyStore = transaction.objectStore("hobbies");
+        const userHobbyStore = transaction.objectStore("userHobby");
+
+        const hobbyRequest = hobbyStore.getAll();
+        hobbyRequest.onsuccess = () => {
+            const allHobbies = hobbyRequest.result;
+            const userHobbies = [];
+
+            // Obtener las aficiones del usuario
+            const userHobbyRequest = userHobbyStore.index("byEmail").getAll("user@example.com"); // Asume que el email es 'user@example.com'
+            userHobbyRequest.onsuccess = () => {
+                const userHobbyList = userHobbyRequest.result;
+                userHobbyList.forEach(item => {
+                    userHobbies.push(item.hobbyId);
+                });
+
+                // Poner las aficiones disponibles en el "Añadir"
+                allHobbies.forEach(hobby => {
+                    if (!userHobbies.includes(hobby.hobbyId)) {
+                        const option = document.createElement("option");
+                        option.value = hobby.hobbyId;
+                        option.textContent = hobby.name;
+                        addHobbySelect.appendChild(option);
+                    }
+                });
+
+                // Poner las aficiones del usuario en el "Eliminar"
+                userHobbyList.forEach(item => {
+                    const option = document.createElement("option");
+                    option.value = item.hobbyId;
+                    option.textContent = `Hobby: ${item.hobbyId}`; // Puedes cambiar esto por el nombre de la afición
+                    deleteHobbySelect.appendChild(option);
+                });
+            };
+        };
+    }
 
     // Función para eliminar aficiones seleccionadas
     deleteHobbiesBtn.addEventListener("click", () => {
@@ -194,26 +215,5 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             alert("Aficiones añadidas.");
         }
-    });
-
-    // Función para aceptar los cambios
-    acceptChangesBtn.addEventListener("click", () => {
-        const newCity = citySelect.value;
-        const transaction = db.transaction(["users"], "readwrite");
-        const usersStore = transaction.objectStore("users");
-
-        const userRequest = usersStore.get("user@example.com");
-
-        userRequest.onsuccess = () => {
-            const user = userRequest.result;
-            if (user) {
-                user.city = newCity; // Actualizar la ciudad
-                const updateRequest = usersStore.put(user);
-                updateRequest.onsuccess = () => {
-                    alert("Cambios guardados exitosamente.");
-                    window.location.href = "profile.html"; // Redirigir al perfil
-                };
-            }
-        };
     });
 });
