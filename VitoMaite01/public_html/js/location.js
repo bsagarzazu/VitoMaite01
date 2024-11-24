@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const rangeInput = document.getElementById("map-range");
     const valueDisplay = document.getElementById("range-value");
 
+    initLoc();
+    
     // Update the radius when the input slider changes
     rangeInput.addEventListener("input", function () {
         radius = rangeInput.value * 1000; // Convert from kilometers to meters
         valueDisplay.textContent = rangeInput.value;
         initLoc();
     });
-
-    initLoc();
 });
 
 function initLoc() {
