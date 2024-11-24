@@ -55,18 +55,24 @@
             <h2>Mi Perfil</h2>
             <div id="profile-info">
                 <img src="" id="profile-photo" alt="Foto de perfil">
-                <p id="profile-name">Nombre: </p>
+                <label for="profile-name">Nombre: </label>
+                <input type="text" id="profile-name" name="profile-name">
                 <p id="profile-gender">Genero: </p>
                 <p id="profile-city">Ciudad: </p>
                 <p id="profile-age">Edad: </p>
-                <p id="profile-hobbies">Aficiones: </p>
+                <div id="hobbies-section">
+                    <label for="hobbies">Aficiones</label>
+                    <select id="hobbies" multiple>
+                        <!-- Las aficiones se llenarán dinámicamente con JS -->
+                    </select>
+                </div>
                 <button id="edit-profile-btn">Editar Perfil</button>
             </div>
         </main>
 
-        
+
         <script src="js/profile.js"></script>
-        
+
         <!-- Footer -->
         <footer>
             <div class="footer-container">
@@ -77,7 +83,6 @@
 
         <script src="js/indexedDB.js"></script>
         <script src="js/loadUsers.js"></script>
-        <script src="js/profile.js"></script>
         <script src="js/headerFooter.js"></script>
     </body>
 </html>
