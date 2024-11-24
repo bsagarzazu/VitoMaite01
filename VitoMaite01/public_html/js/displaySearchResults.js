@@ -117,10 +117,12 @@ function showProfile(user) {
     profileDetails.innerHTML += '<div id="div-aficiones" class="aficiones-modal"></div>';
     showHobbyNames(user, profileDetails);
     
-    // TODO: establecer la imagen
     const modalProfileImg = document.getElementById("modal-profile-img");
     setImageFor(user, modalProfileImg);
-
+    
+    // Show the map location
+    initMap(user.nick, user.latitude, user.longitude);
+    
     const modal = document.getElementById("profile-modal");
     modal.style.display = "flex";
 }
@@ -225,4 +227,24 @@ function showHobbyNames(user, profileDetails) {
         .catch((error) => {
            console.log("Error:", error); 
         });
+}
+
+function initMap(username, lat, lng) {
+    const userLocation = {lat, lng};
+
+    // Create the map
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: userLocation,
+        zoom: 14
+    });
+
+    // Add the user marker
+    userMarker = new google.maps.Marker({
+        position: userLocation,
+        map: map,
+        title: username,
+        icon: {
+            url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }
+    });
 }
