@@ -43,9 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Función para mostrar los hobbies del usuario
     function displayHobbies(hobbies) {
         if (hobbies && hobbies.length > 0) {
-            document.getElementById("profile-hobbies").textContent = "Aficiones: " + hobbies.join(", ");
+            document.getElementById("hobbies").textContent = "Aficiones: " + hobbies.join(", ");
         } else {
-            document.getElementById("profile-hobbies").textContent = "Aficiones: No especificadas";
+            document.getElementById("hobbies").textContent = "Aficiones: No especificadas";
         }
     }
 
