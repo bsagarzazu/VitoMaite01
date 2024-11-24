@@ -48,10 +48,15 @@
                     <span id="imagePreviewText">Arrastra una imagen o selecciona desde el archivo</span>
                 </div>
                 <input type="file" class="file-input" id="profileImageInput" accept="image/*">
+
+                <!-- Modificar Ciudad -->
                 <div>
-                    <!-- Modificar Ciudad -->
-                    <label for="city">Ciudad:</label>
-                    <input type="text" id="city" placeholder="Ingresa tu ciudad">
+                    <select id="city" required>
+                        <option value="" disabled selected> Ciudad Nueva </option>
+                        <option value="Gasteiz">Gasteiz</option>
+                        <option value="Donostia">Donostia</option>
+                        <option value="Bilbo">Bilbo</option>
+                    </select>
                 </div>
 
                 <h3>Aficiones</h3>
@@ -88,6 +93,6 @@
         <script src="js/loadUsers.js"></script>
         <script src="js/headerFooter.js"></script>
         <script src="js/editProfile.js"></script>
-        
+
     </body>
 </html>
