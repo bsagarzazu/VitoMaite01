@@ -8,6 +8,7 @@
         <link rel="icon" href="img/icon.png" type="image/x-icon">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/results.css">
+        <link rel="stylesheet" href="css/map.css">
     </head>
     <body>
         <!-- Header -->
@@ -61,8 +62,21 @@
             <div id="profile-modal" class="modal">
                 <div class="modal-content">
                     <span id="close-btn" class="close-btn">&times;</span>
-                    <div id="profile-img" class="modal-profile-img"></div>
+                    <div id="modal-profile-img-container" class="modal-profile-img-container">
+                        <img id="modal-profile-img" class="modal-profile-img">
+                    </div>
                     <div id="profile-details"></div>
+                    <div id="map-outer-container" class="map-outer-container">
+                        <div id="map-container" class="map-container">
+                            <div id="map"></div>
+                        </div>
+                    </div>
+
+                    <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAg1Ef_2UJmZgyZk4WSKssPVlE4IZOFCtY&callback=initLoc">
+                    </script>
+
+                    <script src="js/profileModalLocation.js"></script>
                 </div>
             </div>
 

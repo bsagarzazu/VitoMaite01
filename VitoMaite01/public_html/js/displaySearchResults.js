@@ -72,7 +72,7 @@ function displaySearchResults(users) {
 }
 
 function setImageFor(user, imgElement) {
-    if(user.image) {
+    if(user.image !== "") {
         if(!sessionStorage.getItem("userLoggedIn")) {
             imgElement.src = "data:image/png;base64," + user.image;
             imgElement.className = "blurred";
@@ -89,29 +89,21 @@ function setImageFor(user, imgElement) {
 function showProfile(user) {
     // Display info
     const profileDetails = document.getElementById("profile-details");
+    
     profileDetails.innerHTML = `
         <h2><strong>${user.nick}</strong></h2>
         <h4><strong>${user.gender === "H" ? "Hombre" : "Mujer"}</strong></h4>
         <p><strong>Edad:</strong> ${user.age}</p>
         <p><strong>Ciudad:</strong> ${user.city}</p>
     `;
-    // aficiones-modal: width: 80% o asi, contiene una ul
-    if(sessionStorage.getItem("userLoggedIn")) {
-        profileDetails.innerHTML += '<label for="div-aficiones"><strong>Aficiones:</strong></p>';
-        profileDetails.innerHTML += '<div id="div-aficiones" class="aficiones-modal"></div>';
-        showHobbyNames(user, profileDetails);
-    }
+
+    profileDetails.innerHTML += '<label for="div-aficiones"><strong>Aficiones:</strong></p>';
+    profileDetails.innerHTML += '<div id="div-aficiones" class="aficiones-modal"></div>';
+    showHobbyNames(user, profileDetails);
     
     // TODO: establecer la imagen
-    const modalProfileImg = document.getElementById("profile-img");
+    const modalProfileImg = document.getElementById("modal-profile-img");
     setImageFor(user, modalProfileImg);
-            
-
-
-    /**Object.entries(userData).forEach(([key, value]) => {
-        console.log(key, value);
-        //profileDetails.innerHTML += `<p><strong>${capitalized(key)}:</strong> ${value}</p>`;
-    });**/
 
     const modal = document.getElementById("profile-modal");
     modal.style.display = "flex";
