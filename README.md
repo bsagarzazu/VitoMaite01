@@ -1,3 +1,6 @@
 # VitoMaite01
-Guía de uso de GitHub con NetBeans: https://github.com/crisdev/GitHub_Netbeans
-En resumen: clonais y cada vez que hagais cambios commit y push upstream. Todo desde Teams.
+
+Firebase hosting: [https://vitomaite01.web.app/](https://vitomaite01.web.app/)  
+GitHub hosting: [https://bsagarzazu/vitomaite01/](https://bsagarzazu/vitomaite01/)
+
+Por Ariz Flores, Beñat Sagarzazu y Yuyuan Jiang
