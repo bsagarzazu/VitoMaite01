@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const usu = JSON.parse(sessionStorage.getItem("userLoggedIn"));
     console.log("Usuario cargado: ", usu);
 
-    if (usu && usu.imagen && usu.nick && usu.gender && usu.city && usu.age && usu.userHobby && usu.hobbyNames) {
-        updateProfile();
+    if (usu) {
+        await updateProfile();
     } else {
         console.error("Faltan datos del usuario.");
     }
@@ -21,7 +21,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     async function updateProfile(usu) {
         console.log("Actualizando perfil con:", usu);
         // Actualizar los campos con la información del usuario
-        document.getElementById("profile-photo").src = "data:image/png;base64," + usu.imagen || "img/placeholder.jpg";
+        //document.getElementById("profile-photo").src = "data:image/png;base64," + usu.imagen || "img/placeholder.jpg";
+        document.getElementById("profile-photo").src = "data:image/png;base64," + (usu.imagen || "") || "img/placeholder.jpg";
         document.getElementById("profile-name").textContent = "Nombre: " + usu.nick;
         document.getElementById("profile-gender").textContent = "Género: " + usu.gender;
         document.getElementById("profile-city").textContent = "Ciudad: " + usu.city;

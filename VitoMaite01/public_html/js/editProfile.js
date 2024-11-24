@@ -1,133 +1,204 @@
 //YUYUAN
 //editProfile.js
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
+    const profilePhoto = document.getElementById("profile-photo");
+    const profilePhotoInput = document.getElementById("profile-photo-input");
+    const citySelect = document.getElementById("city");
     const acceptBtn = document.getElementById("accept-btn");
-    acceptBtn.addEventListener("click", function () {
-        const pFoto = document.getElementById("photo").value;
-        const pCiudad = document.getElementById("city").value;
-        
-        window.location.href = "profile.html";
+    const addHobbiesBtn = document.getElementById("add-hobbies-btn");
+    const deleteHobbiesBtn = document.getElementById("delete-hobbies-btn");
+    const hobbiesSelect = document.getElementById("hobbies");
+
+    // Obtener los datos del usuario
+    const usu = JSON.parse(sessionStorage.getItem("userLoggedIn"));
+    if (!usu) {
+        console.error("No hay datos de usuario en sessionStorage.");
+        return;
+    }
+
+    // Inicializar la foto de perfil y la ciudad
+    if (usu.imagen) {
+        profilePhoto.src = "data:image/png;base64," + usu.imagen;
+    } else {
+        profilePhoto.src = "img/placeholder.jpg";  // Imagen por defecto si no hay
+    }
+    citySelect.value = usu.city || "Gasteiz";  // Establecer la ciudad actual
+
+    // Cargar aficiones del usuario
+    cargarAficiones(usu);
+
+    // Mostrar el selector de foto de perfil al hacer clic en la imagen
+    profilePhoto.addEventListener("click", () => {
+        profilePhotoInput.click();
     });
-});
 
-/*
-function clickAddHobbies() {
-    // Mostrar las aficiones disponibles para añadir (sin incluir las que ya están en usuario_aficion)
-    const añadirContainer = document.getElementById("add-hobbies");
-    todas_aficiones.forEach(function (aficion) {
-        if (!usuario_aficion.includes(aficion)) {
-            const checkbox = document.createElement("input");
-            checkbox.type = "checkbox";
-            checkbox.id = aficion;
-            checkbox.value = aficion;
-
-            const label = document.createElement("label");
-            label.setAttribute("for", aficion);
-            label.textContent = aficion;
-
-            const div = document.createElement("div");
-            div.appendChild(checkbox);
-            div.appendChild(label);
-            añadirContainer.appendChild(div);
+    // Manejar la carga de una nueva imagen de perfil
+    profilePhotoInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                profilePhoto.src = reader.result;
+            };
+            reader.readAsDataURL(file);
         }
     });
 
-    
-    // Función para añadir las aficiones seleccionadas
-    document.getElementById("añadirBtn").addEventListener("click", function () {
-        const checkboxesAñadir = document.querySelectorAll("#añadir-aficiones input[type='checkbox']:checked");
-        checkboxesAñadir.forEach(function (checkbox) {
-            // Añadir la afición seleccionada al array usuario_aficion
-            if (!usuario_aficion.includes(checkbox.value)) {
-                usuario_aficion.push(checkbox.value);
-            }
+    // Gestionar los cambios cuando se hace clic en "Aceptar"
+    acceptBtn.addEventListener("click", () => {
+        // Actualizar la foto y la ciudad en sessionStorage
+        const newImage = profilePhoto.src.split(",")[1];  // Guardar solo la parte base64
+        const newCity = citySelect.value;
+
+        // Actualizar el objeto de usuario
+        usu.imagen = newImage;
+        usu.city = newCity;
+
+        // Guardar los cambios en sessionStorage
+        sessionStorage.setItem("userLoggedIn", JSON.stringify(usu));
+
+        alert("Cambios guardados.");
+    });
+
+    // Añadir aficiones (botón "Añadir Aficiones")
+    addHobbiesBtn.addEventListener("click", () => {
+        // Mostrar una lista de aficiones disponibles para añadir (que no estén ya en el perfil)
+        mostrarAñadirAficiones(usu);
+    });
+
+    // Eliminar aficiones (botón "Eliminar Aficiones")
+    deleteHobbiesBtn.addEventListener("click", () => {
+        // Mostrar una lista de aficiones actuales con checkboxes para eliminar
+        mostrarEliminarAficiones(usu);
+    });
+});
+
+function cargarAficiones(usu) {
+    const hobbiesSelect = document.getElementById("hobbies");
+    hobbiesSelect.innerHTML = "";  // Limpiar la lista actual de aficiones
+
+    // Mostrar las aficiones actuales del usuario
+    if (usu && usu.userHobby) {
+        usu.userHobby.forEach((hobby) => {
+            const option = document.createElement("option");
+            option.value = hobby.hobbyId;
+            option.textContent = hobby.hobbyName;
+            hobbiesSelect.appendChild(option);
         });
-        alert("Aficiones añadidas: " + Array.from(checkboxesAñadir).map(cb => cb.value).join(", "));
-        actualizarAficiones();
-    });
-
+    }
 }
-);
 
-function clickRemoveHobbies() {
-    // Mostrar las aficiones actuales del usuario (para eliminar)
-    const eliminarContainer = document.getElementById("remove-hobbies");
-    usuario_aficion.forEach(function (aficion) {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = aficion;
-        checkbox.value = aficion;
+function mostrarAñadirAficiones(usu) {
+    const availableHobbies = getAvailableHobbies(usu);
 
-        const label = document.createElement("label");
-        label.setAttribute("for", aficion);
-        label.textContent = aficion;
+    if (availableHobbies.length > 0) {
+        // Crear un modal o sección con las aficiones disponibles
+        const addHobbiesSection = document.createElement("div");
+        addHobbiesSection.innerHTML = "<h3>Añadir Aficiones</h3>";
 
-        const div = document.createElement("div");
-        div.appendChild(checkbox);
-        div.appendChild(label);
-        eliminarContainer.appendChild(div);
-    });
-
-    
-    // Función para eliminar las aficiones seleccionadas
-    document.getElementById("eliminarBtn").addEventListener("click", function () {
-        const checkboxesEliminar = document.querySelectorAll("#eliminar-aficiones input[type='checkbox']:checked");
-        checkboxesEliminar.forEach(function (checkbox) {
-            // Eliminar la afición seleccionada del array usuario_aficion
-            const index = usuario_aficion.indexOf(checkbox.value);
-            if (index !== -1) {
-                usuario_aficion.splice(index, 1);
-            }
-        });
-        alert("Aficiones eliminadas: " + Array.from(checkboxesEliminar).map(cb => cb.value).join(", "));
-        actualizarAficiones();
-    });
-
-}
-);
-
-
-function actualizarAficiones() {
-        // Limpiar los contenedores y volver a mostrar las aficiones
-        eliminarContainer.innerHTML = '';
-        añadirContainer.innerHTML = '';
-
-        // Volver a mostrar las aficiones para eliminar
-        usuario_aficion.forEach(function (aficion) {
+        availableHobbies.forEach((hobby) => {
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
-            checkbox.id = aficion;
-            checkbox.value = aficion;
-
+            checkbox.value = hobby.hobbyId;
             const label = document.createElement("label");
-            label.setAttribute("for", aficion);
-            label.textContent = aficion;
+            label.textContent = hobby.hobbyName;
 
             const div = document.createElement("div");
             div.appendChild(checkbox);
             div.appendChild(label);
-            eliminarContainer.appendChild(div);
+
+            addHobbiesSection.appendChild(div);
         });
 
-        // Volver a mostrar las aficiones disponibles para añadir
-        todas_aficiones.forEach(function (aficion) {
-            if (!usuario_aficion.includes(aficion)) {
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.id = aficion;
-                checkbox.value = aficion;
+        // Mostrar las aficiones disponibles en el DOM
+        document.body.appendChild(addHobbiesSection);
+        // Añadir un botón para confirmar la selección
+        const confirmBtn = document.createElement("button");
+        confirmBtn.textContent = "Añadir seleccionadas";
+        addHobbiesSection.appendChild(confirmBtn);
 
-                const label = document.createElement("label");
-                label.setAttribute("for", aficion);
-                label.textContent = aficion;
+        confirmBtn.addEventListener("click", () => {
+            const selectedHobbies = [];
+            const checkboxes = addHobbiesSection.querySelectorAll("input[type='checkbox']:checked");
+            checkboxes.forEach((checkbox) => {
+                selectedHobbies.push(checkbox.value);
+            });
 
-                const div = document.createElement("div");
-                div.appendChild(checkbox);
-                div.appendChild(label);
-                añadirContainer.appendChild(div);
-            }
+            // Añadir las aficiones seleccionadas al perfil del usuario
+            selectedHobbies.forEach((hobbyId) => {
+                const hobby = availableHobbies.find((h) => h.hobbyId === hobbyId);
+                if (hobby) {
+                    usu.userHobby.push(hobby);
+                }
+            });
+
+            sessionStorage.setItem("userLoggedIn", JSON.stringify(usu));
+            alert("Aficiones añadidas.");
+            location.reload();
         });
+    } else {
+        alert("No hay aficiones disponibles para añadir.");
     }
-});
- * 
- */
+}
+
+function mostrarEliminarAficiones(usu) {
+    const hobbiesToDeleteSection = document.createElement("div");
+    hobbiesToDeleteSection.innerHTML = "<h3>Eliminar Aficiones</h3>";
+
+    if (usu && usu.userHobby) {
+        usu.userHobby.forEach((hobby) => {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = hobby.hobbyId;
+            const label = document.createElement("label");
+            label.textContent = hobby.hobbyName;
+
+            const div = document.createElement("div");
+            div.appendChild(checkbox);
+            div.appendChild(label);
+
+            hobbiesToDeleteSection.appendChild(div);
+        });
+
+        // Mostrar las aficiones en el DOM
+        document.body.appendChild(hobbiesToDeleteSection);
+        // Añadir un botón para confirmar la eliminación
+        const confirmDeleteBtn = document.createElement("button");
+        confirmDeleteBtn.textContent = "Eliminar seleccionadas";
+        hobbiesToDeleteSection.appendChild(confirmDeleteBtn);
+
+        confirmDeleteBtn.addEventListener("click", () => {
+            const selectedHobbies = [];
+            const checkboxes = hobbiesToDeleteSection.querySelectorAll("input[type='checkbox']:checked");
+            checkboxes.forEach((checkbox) => {
+                selectedHobbies.push(checkbox.value);
+            });
+
+            // Eliminar las aficiones seleccionadas
+            usu.userHobby = usu.userHobby.filter((hobby) => !selectedHobbies.includes(hobby.hobbyId));
+            sessionStorage.setItem("userLoggedIn", JSON.stringify(usu));
+
+            alert("Aficiones eliminadas.");
+            location.reload();
+        });
+    } else {
+        alert("No tienes aficiones para eliminar.");
+    }
+}
+
+function getAvailableHobbies(usu) {
+    // Obtener todas las aficiones disponibles que no están en el perfil del usuario
+    const allHobbies = [
+        { hobbyId: 1, hobbyName: "Fútbol" },
+        { hobbyId: 2, hobbyName: "Ciclismo" },
+        { hobbyId: 3, hobbyName: "Lectura" },
+        { hobbyId: 4, hobbyName: "Música" },
+    ];
+
+    // Filtrar las aficiones que el usuario ya tiene
+    const availableHobbies = allHobbies.filter((hobby) => {
+        return !usu.userHobby.some((uh) => uh.hobbyId === hobby.hobbyId);
+    });
+
+    return availableHobbies;
+}
