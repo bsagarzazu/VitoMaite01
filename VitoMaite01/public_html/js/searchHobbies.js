@@ -6,19 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     fillHobbies(hobbiesSelect);
 
-    // Prevengo que se escriba a mano
-    document.getElementById('age-min').addEventListener('keydown', function () {
-        if (![38, 40].includes(event.keyCode)) { // 38: flecha arriba, 40: flecha abajo
-            event.preventDefault();
-        }
-    });
-
-    document.getElementById('age-max').addEventListener('keydown', function () {
-        if (![38, 40].includes(event.keyCode)) { // 38: flecha arriba, 40: flecha abajo
-            event.preventDefault();
-        }
-    });
-
     searchBtn.addEventListener("click", function () {
         const gender = document.getElementById("search-gender").value;
         const minAge = document.getElementById("age-min").value;
@@ -33,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!gender) {
             formValid = false;
             errorMessage = "Por favor, indica el género que buscas.";
-        } else if (!minAge || !maxAge) {
+        } else if (!minAge || !maxAge || minAge < 18 || minAge > 99 || maxAge < 18 || maxAge > 99) {
             formValid = false;
             errorMessage = "Por favor, indica un rango de edad válido.";
         } else if (!city) {
