@@ -147,3 +147,5 @@ function showMarkersInRadius(userLocation) {
         }
     });
 }
+
+// CLAVE: AIzaSyCl1NZDkN3lZ3JuKg1t7speq5S3SNYwpcU
