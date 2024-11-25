@@ -155,7 +155,7 @@ main {
     flex-direction: column;
 }
 
-#profile-info,
+.profile-info,
 .search-box {
     background-color: white;
     padding: 20px;
@@ -188,7 +188,7 @@ main {
     max-width: 300px;
 }
 
-.edit-btn,
+.profile-info button,
 .login-box button,
 .search-box select,
 .search-box button {
@@ -201,6 +201,7 @@ main {
     border: 1px solid #ddd;
 }
 
+.profile-info button:hover,
 .login-box button:hover,
 .search-box button:hover {
     background-color: #b0b0b0;
