@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!gender) {
             formValid = false;
             errorMessage = "Por favor, indica el género que buscas.";
-        } else if (!minAge || !maxAge || minAge < 18 || minAge > 99 || maxAge < 18 || maxAge > 99) {
+        } else if (!minAge || !maxAge || minAge < 18 || minAge > 99 || maxAge < 18 || maxAge > 99 || minAge > maxAge) {
             formValid = false;
             errorMessage = "Por favor, indica un rango de edad válido entre 18 y 99 años.";
         } else if (!city) {
