@@ -31,7 +31,10 @@ function displayHobbies(hobbies) {
         document.getElementById("hobbies").textContent = "Aficiones: No especificadas";
     }
 }
-
+/*
+ * Si includeUserHobbies = true devuelve los hobbyId y hobbyName que tiene el usuario
+ * Si includeUserHobbies = false devuelve los hobbyId y hobbyName que NO tiene el usuario
+ */
 function getUserHobbies(userEmail, includeUserHobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
@@ -98,7 +101,10 @@ function getUserHobbies(userEmail, includeUserHobbies) {
         };
     });
 }
-
+/*
+ * Si addHobbies = true añade los hobbies pasados como parámetro
+ * Si addHobbies = false elimina los hobbies pasados como parámetro
+ */
 function updateUserHobbies(userEmail, hobbies, addHobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
