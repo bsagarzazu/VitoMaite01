@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const gender = document.getElementById("profile-gender");
     const city = document.getElementById("profile-city");
     const age = document.getElementById("profile-age");
-    
+
     const editHobbiesModal = document.getElementById("edit-hobbies-modal");
     const addHobbiesSelect = document.getElementById("available-hobbies");
     const deleteHobbiesSelect = document.getElementById("user-hobbies");
@@ -18,12 +18,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
 
-    profilePhoto.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
+    profilePhoto.src = (user.image && !user.image.startsWith("data:image/png;base64,"))
+            ? "data:image/png;base64," + user.image
+            : user.image || "img/placeholder.jpg";
     name.textContent = "Nombre: " + user.nick;
     gender.textContent = "Género: " + (user.gender === "H" ? "Hombre" : "Mujer");
     city.textContent = user.city;
     age.textContent = "Edad: " + user.age;
-    
+
     // Parte de la ciudad
     const editCityBtn = document.getElementById("editCity-btn");
     const editCity = document.getElementById("change-city-first");
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     getUserHobbies(user.email, true).then((selected) => displayHobbies(selected));
-    
+
     const editHobbiesBtn = document.getElementById("editHobbies-btn");
     editHobbiesBtn.addEventListener("click", (event) => {
         Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
@@ -56,38 +58,37 @@ document.addEventListener("DOMContentLoaded", function () {
                     editHobbiesModal.style.display = "flex";
                 });
     });
-            
+
     const acceptChangesBtn = document.getElementById("accept-hobby-changes-btn");
     acceptChangesBtn.addEventListener("click", (event) => {
         const hobbiesToDelete = Array.from(deleteHobbiesSelect.options)
-            .filter(option => option.selected)
-            .map(option => option.value);
+                .filter(option => option.selected)
+                .map(option => option.value);
         const hobbiesToAdd = Array.from(addHobbiesSelect.options)
-            .filter(option => option.selected)
-            .map(option => option.value);
-        
+                .filter(option => option.selected)
+                .map(option => option.value);
+
         getUserHobbies(user.email, true)
-            .then((hobbies) => {
-                const newHobbyCount = hobbies.length - hobbiesToDelete.length + hobbiesToAdd.length;
-                if(newHobbyCount < 0 || newHobbyCount > 5) {
-                    alert("La nueva cantidad de hobbies debe estar entre 0 y 5");
-                }
-                else {
-                    updateUserHobbies(user.email, hobbiesToDelete, false)
-                        .then(message => console.log(message));
-                    updateUserHobbies(user.email, hobbiesToAdd, true)
-                        .then(message => console.log(message));
-                    editHobbiesModal.style.display = "none";
-                    
-                    // Actualizar los hobbies en el perfil
-                    getUserHobbies(user.email, true)
-                        .then((userHobbies) => {
-                            displayHobbies(userHobbies);
-                        });
-                }
-            });
-        
-        
+                .then((hobbies) => {
+                    const newHobbyCount = hobbies.length - hobbiesToDelete.length + hobbiesToAdd.length;
+                    if (newHobbyCount < 0 || newHobbyCount > 5) {
+                        alert("La nueva cantidad de hobbies debe estar entre 0 y 5");
+                    } else {
+                        updateUserHobbies(user.email, hobbiesToDelete, false)
+                                .then(message => console.log(message));
+                        updateUserHobbies(user.email, hobbiesToAdd, true)
+                                .then(message => console.log(message));
+                        editHobbiesModal.style.display = "none";
+
+                        // Actualizar los hobbies en el perfil
+                        getUserHobbies(user.email, true)
+                                .then((userHobbies) => {
+                                    displayHobbies(userHobbies);
+                                });
+                    }
+                });
+
+
     });
 
     //Modificar la foto
@@ -132,7 +133,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Establecer la imagen previsualizada en el perfil
             profilePhoto.src = newImage; // Cargar la imagen en el perfil
             userAvatar.src = newImage; // Cargar la imagen en el perfil 'user-avatar'
-            
+
 
             updateUserData(user.email, newImage, false) // El 'false' indica que estamos actualizando la imagen
                     .then((message) => {

@@ -19,7 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
         userLogged.style.display = "flex";
         userGuest.style.display = "none";
-        userAvatar.src = "data:image/png;base64," + user.image || "img/placeholder.jpg";
+        userAvatar.src = (user.image && !user.image.startsWith("data:image/png;base64,"))
+                ? "data:image/png;base64," + user.image
+                : user.image || "img/placeholder.jpg";
         usernameSpan.textContent = user.nick;
         userGreeting.textContent = "Hola, " + user.nick;
 
@@ -33,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         userLogged.style.display = "none";
         userGuest.style.display = "flex";
     }
-    
+
     loginBtn.addEventListener("click", function () {
         window.location.href = "login.html";
     });
