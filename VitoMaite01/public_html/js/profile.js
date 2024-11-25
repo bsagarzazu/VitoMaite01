@@ -1,36 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const profile = document.getElementById("profile-photo");
+    const profilePhoto = document.getElementById("profile-photo");
     const name = document.getElementById("profile-name");
     const gender = document.getElementById("profile-gender");
     const city = document.getElementById("profile-city");
     const age = document.getElementById("profile-age");
-    
+
     const addHobbies = document.getElementById("");
     const deleteHobbies = document.getElementById("");
     let selected;
     let unselected;
-    
+
     const closeBtn = document.getElementById("edit-hobbies-close-btn");
     closeBtn.addEventListener("click", (event) => {
         const modal = document.getElementById("edit-hobbies-modal");
         modal.style.display = "none";
     });
-    
+
     const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-        
-    profile.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
+
+    profilePhoto.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
     name.textContent = "Nombre: " + user.nick;
     gender.textContent = "Género: " + (user.gender === "H" ? "Hombre" : "Mujer");
     city.textContent = "Ciudad: " + user.city;
     age.textContent = "Edad: " + user.age;
-        
+
     selected = getUserHobbies(user.email, true);
     unselected = getUserHobbies(user.email, false);
-    
+
     Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
             .then(([selected, unselected]) => {
                 displayHobbies(selected);
-    
+
                 const editHobbiesBtn = document.getElementById("editHobbies-btn");
                 editHobbiesBtn.addEventListener("click", (event) => {
                     const editHobbiesModal = document.getElementById("edit-hobbies-modal");
@@ -44,6 +44,64 @@ document.addEventListener("DOMContentLoaded", function () {
                     editHobbiesModal.style.display = "flex";
                 });
             });
+
+    //Modificar la foto
+    // Obtener elementos
+    const profileImageInput = document.getElementById("profileImageInput");
+    const acceptPhotoChangesBtn = document.getElementById("accept-photo-changes-btn");
+    const editPhotoModal = document.getElementById("edit-photo-modal");
+    const imagePreviewText = document.getElementById("imagePreviewText");
+    const profileImageContainer = document.getElementById("profileImageContainer");
+
+    // Abrir modal para cambiar la foto
+    document.getElementById("editPhoto-btn").addEventListener("click", () => {
+        editPhotoModal.style.display = "block"; // Mostrar el modal
+    });
+
+    // Cerrar el modal
+    document.getElementById("edit-photo-close-btn").addEventListener("click", () => {
+        editPhotoModal.style.display = "none"; // Cerrar el modal
+    });
+
+    // Previsualizar imagen seleccionada en el contenedor 'image-container'
+    profileImageInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imageUrl = e.target.result; // La imagen en Base64
+
+                // Mostrar la imagen seleccionada en el contenedor
+                profileImageContainer.innerHTML = `<img src="${imageUrl}" id="imagePreview" alt="Vista previa de la imagen" />`;
+                imagePreviewText.style.display = "none"; // Ocultar texto de previsualización
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Cuando el usuario hace clic en "Aceptar", actualizar la foto en IndexedDB
+    acceptPhotoChangesBtn.addEventListener("click", () => {
+        const newImage = document.getElementById("imagePreview")?.src; // Obtener la imagen en Base64 desde el contenedor
+
+        if (newImage) {
+            // Establecer la imagen previsualizada en el perfil
+            profilePhoto.src = newImage; // Cargar la imagen en el perfil
+
+            // Aquí debes pasar el email del usuario y la nueva imagen para actualizarla
+            const email = "usuario@dominio.com"; // Debes obtener el email del usuario de alguna manera
+            updateUserData(email, newImage, false) // El 'false' indica que estamos actualizando la imagen
+                    .then((message) => {
+                        console.log(message); // Mostrar mensaje de éxito
+                        editPhotoModal.style.display = "none"; // Cerrar modal
+                    })
+                    .catch((error) => {
+                        console.error(error); // Mostrar mensaje de error
+                    });
+        } else {
+            alert("Por favor selecciona una imagen.");
+        }
+    });
+
 });
 
 function displayHobbies(hobbies) {
@@ -73,7 +131,7 @@ function fillHobbies(selectElement, hobbies) {
 function getUserHobbies(userEmail, includeUserHobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
-        
+
         request.onsuccess = (event) => {
             const db = event.target.result;
 
@@ -99,7 +157,7 @@ function getUserHobbies(userEmail, includeUserHobbies) {
                     hobbyCursor.onsuccess = (event) => {
                         const hobbyCursorResult = event.target.result;
                         if (hobbyCursorResult) {
-                            allHobbies.push({ id: hobbyCursorResult.value.hobbyId, name: hobbyCursorResult.value.hobbyName });
+                            allHobbies.push({id: hobbyCursorResult.value.hobbyId, name: hobbyCursorResult.value.hobbyName});
                             hobbyCursorResult.continue();
                         } else {
                             // Filtrar los hobbies del usuario y los que no tiene
