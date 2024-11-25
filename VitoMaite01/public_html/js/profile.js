@@ -32,7 +32,7 @@ function displayHobbies(hobbies) {
     }
 }
 
-function getUserHobbies(userEmail, includeUserHobbies = true) {
+function getUserHobbies(userEmail, includeUserHobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
         
@@ -42,9 +42,7 @@ function getUserHobbies(userEmail, includeUserHobbies = true) {
             // Acceder al objectStore "userHobby"
             const userHobbyStore = db.transaction("userHobby").objectStore("userHobby");
             const index = userHobbyStore.index("byEmail");
-
-            // Excluir el userEmail (utilizamos IDBKeyRange.bound para obtener todo menos el userEmail)
-            const hobbyRequest = index.openCursor(IDBKeyRange.bound(null, userEmail, false, true));
+            const hobbyRequest = index.openCursor(IDBKeyRange.only(userEmail));
 
             const hobbyIds = [];
             hobbyRequest.onsuccess = (event) => {
