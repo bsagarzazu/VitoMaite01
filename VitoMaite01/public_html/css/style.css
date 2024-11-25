@@ -418,3 +418,25 @@ footer {
     border: 2px solid #000000;
     height: 450px;
 }
+
+.change-city {
+    display: flex;
+    align-items: center;  /* Alinea los elementos verticalmente al centro */
+    gap: 10px;  /* Espacio entre los elementos */
+}
+
+.change-city-first {
+    display: flex;
+    align-items: center;
+    gap: 5px;  /* Espacio entre los elementos dentro de cada bloque */
+}
+
+.change-city-second {
+    display: none;
+    align-items: center;
+    gap: 5px;  /* Espacio entre los elementos dentro de cada bloque */
+}
+
+#city {
+    margin-left: 10px;  /* Opcional: Añadir margen a la izquierda del select */
+}

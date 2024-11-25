@@ -71,13 +71,26 @@
                         </div>
                     </div>
                 </div>
-
                 <div>
                     <p id="profile-name">Nombre: </p>
                 </div>
                 <p id="profile-gender">Genero: </p>
-                <p id="profile-city">Ciudad: </p>
-                <button id="editCity-btn">Cambiar Ciudad</button>
+                <div class="change-city">
+                    <label>Ciudad:</label>
+                    <div class="change-city-first" id="change-city-first">
+                        <p id="profile-city"></p>
+                        <button id="editCity-btn">Cambiar Ciudad</button>
+                    </div>
+                    <div class="change-city-second" id="change-city-second">
+                        <select id="city" required>
+                            <option value="" disabled selected>Ciudad Nueva</option>
+                            <option value="Gasteiz">Gasteiz</option>
+                            <option value="Donostia">Donostia</option>
+                            <option value="Bilbo">Bilbo</option>
+                        </select>
+                        <button id="save-city">Guardar</button>
+                    </div>
+                </div>
                 <p id="profile-age">Edad: </p>
                 <div id="hobbies-section">
                     <p id="hobbies">

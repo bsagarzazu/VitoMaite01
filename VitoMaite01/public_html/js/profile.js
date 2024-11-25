@@ -24,9 +24,28 @@ document.addEventListener("DOMContentLoaded", function () {
     profilePhoto.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
     name.textContent = "Nombre: " + user.nick;
     gender.textContent = "Género: " + (user.gender === "H" ? "Hombre" : "Mujer");
-    city.textContent = "Ciudad: " + user.city;
+    city.textContent = user.city;
     age.textContent = "Edad: " + user.age;
-
+    
+    // Parte de la ciudad
+    const editCityBtn = document.getElementById("editCity-btn");
+    const editCity = document.getElementById("change-city-first");
+    const saveCity = document.getElementById("change-city-second");
+    const saveCityBtn = document.getElementById("save-city");
+    const citySelect = document.getElementById("city");
+    editCityBtn.addEventListener("click", (event) => {
+        saveCity.style.display = "flex";
+        editCity.style.display = "none";
+    });
+    saveCityBtn.addEventListener("click", (event) => {
+        updateUserData(user.email, citySelect.value, true);
+        
+        let newUser = JSON.parse(sessionStorage.getItem("userLoggedIn"));
+        city.textContent = newUser.city;
+        
+        saveCity.style.display = "none";
+        editCity.style.display = "flex";
+    });
 
     Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
             .then(([selected, unselected]) => {
@@ -307,15 +326,18 @@ function updateUserData(email, data, isCity) {
                     if (isCity) {
                         // Si isCity es true, actualizamos la ciudad
                         user.city = data;
+                        alert("Ciudad cambiada");
                     } else {
                         // Si isCity es false, actualizamos la imagen (Base64)
                         user.image = data;
+                        alert("Imagen cambiada");
                     }
 
                     // Actualizamos el objeto usuario con los nuevos datos
                     const updateRequest = userStore.put(user);
 
                     updateRequest.onsuccess = () => {
+                        sessionStorage.setItem("userLoggedIn", JSON.stringify(user));
                         resolve("Usuario actualizado correctamente.");
                     };
 
