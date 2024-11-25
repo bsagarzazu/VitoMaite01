@@ -406,3 +406,9 @@ footer {
     font-weight: bold;
     text-align: center;
 }
+
+.edit-photo-modal {
+    border-radius: 10px;
+    border: 2px solid #000000;
+    height: 150px;
+}
