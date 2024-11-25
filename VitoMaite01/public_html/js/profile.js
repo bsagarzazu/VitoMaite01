@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const city = document.getElementById("profile-city");
     const age = document.getElementById("profile-age");
     
+    const addHobbies = document.getElementById("");
+    const deleteHobbies = document.getElementById("");
+    let selected;
+    let unselected;
+    
     if(sessionStorage.getItem("userLoggedIn")) {
         const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
         
@@ -14,23 +19,41 @@ document.addEventListener("DOMContentLoaded", function () {
         city.textContent = "Ciudad: " + user.city;
         age.textContent = "Edad: " + user.age;
         
-        displayHobbies(getUserHobbies(user.email));
+        selected = getUserHobbies(user.email, true);
+        unselected = getUserHobbies(user.email, false);
+        
+        displayHobbies(selected);
     }
     
     const editHobbiesBtn = document.getElementById("editHobbies-btn");
     editHobbiesBtn.addEventListener("click", (event) => {
         const editHobbiesModal = document.getElementById("edit-hobbies-modal");
+        fillHobbies(addHobbies, unselected);
+        fillHobbies(deleteHobbies, selected);
         editHobbiesModal.style.display = "flex";
     });
 });
 
 function displayHobbies(hobbies) {
     if (hobbies && hobbies.length > 0) {
-        document.getElementById("hobbies").textContent = "Aficiones: " + hobbies.join(", ");
+        // Extraemos solo los nombres de los hobbies
+        const hobbyNames = hobbies.map(hobby => hobby.name);
+        document.getElementById("hobbies").textContent = "Aficiones: " + hobbyNames.join(", ");
     } else {
         document.getElementById("hobbies").textContent = "Aficiones: No especificadas";
     }
 }
+
+function fillHobbies(selectElement, hobbies) {
+    selectElement.innerHTML = '';
+    hobbies.forEach(hobby => {
+        const option = document.createElement('option');
+        option.value = hobby.id;
+        option.textContent = hobby.name;
+        selectElement.appendChild(option);
+    });
+}
+
 /*
  * Si includeUserHobbies = true devuelve los hobbyId y hobbyName que tiene el usuario
  * Si includeUserHobbies = false devuelve los hobbyId y hobbyName que NO tiene el usuario
