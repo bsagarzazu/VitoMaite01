@@ -254,41 +254,44 @@ function updateUserHobbies(userEmail, hobbies, addHobbies) {
 
         request.onsuccess = (event) => {
             const db = event.target.result;
-
-            // Acceder al objectStore "userHobby"
+            // Acceder al objectStore "userHobby" que contiene los hobbies del usuario
             const userHobbyStore = db.transaction("userHobby", "readwrite").objectStore("userHobby");
 
             if (addHobbies) {
                 // Si addHobbies es true, añadimos los hobbies para el usuario
                 hobbies.forEach(hobbyId => {
-                    return new Promise((hobby_resolve, hobby_reject) => {
-                        const hobbyRecord = {
-                            userEmail: userEmail,
-                            hobbyId: parseInt(hobbyId)
-                        };
-                        const addRequest = userHobbyStore.add(hobbyRecord);
-                        addRequest.onsuccess = (event) => {
-                            hobby_resolve();
-                        };
-                    });
+                    const hobbyRecord = {
+                        userEmail: userEmail,
+                        hobbyId: parseInt(hobbyId)
+                    };
+                    const addRequest = userHobbyStore.add(hobbyRecord);
+                    addRequest.onsuccess = () => {
+                        // Hobby añadido correctamente
+                    };
+                    addRequest.onerror = () => {
+                        reject("Error al añadir hobby.");
+                    };
                 });
                 resolve("Hobbies añadidos correctamente.");
             } else {
                 // Si addHobbies es false, eliminamos los hobbies del usuario
                 hobbies.forEach(hobbyId => {
-                    const hobbyKey = IDBKeyRange.only(userEmail); // Usamos el email para buscar el hobby específico
-                    const hobbyRequest = userHobbyStore.index("byEmail").openCursor(hobbyKey);
+                    const hobbyRequest = userHobbyStore.index("byEmail").openCursor(IDBKeyRange.only(userEmail));
+
                     hobbyRequest.onsuccess = (event) => {
                         const cursor = event.target.result;
                         if (cursor) {
-                            if (cursor.value.hobbyId === hobbyId) {
-                                userHobbyStore.delete(cursor.primaryKey);
+                            // Verificamos si el hobby actual tiene el mismo ID que el hobby a eliminar
+                            if (cursor.value.hobbyId === parseInt(hobbyId)) {
+                                userHobbyStore.delete(cursor.primaryKey);  // Eliminar el hobby
+                                console.log("Hobby eliminado: " + hobbyId);
                             }
                             cursor.continue();
                         }
                     };
+
                     hobbyRequest.onerror = () => {
-                        reject("Error al eliminar hobby para el usuario.");
+                        reject("Error al eliminar hobby.");
                     };
                 });
                 resolve("Hobbies eliminados correctamente.");
