@@ -7,7 +7,6 @@
         <title>VitoMaite</title>
         <link rel="icon" href="img/icon.png" type="image/x-icon">
         <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/profile.css">
     </head>
     <body>
 
@@ -71,19 +70,32 @@
                 <button id="editHobbies-btn">Modificar Hobbies</button>
             </div>
             
-            <div id="edit-hobbies-modal" class="modal">
-                <div id="available-hobbies-content" class="hobbies-modal">
-                    <label>Hobbies disponibles</label>
-                    <select id="available-hobbies" multiple>
-                        <!-- Se llena dinámicamente -->
-                    </select>
-                </div>
-                
-                <div id="user-hobbies-content" class="hobbies-modal">
-                    <label>Tus hobbies</label>
-                    <select id="user-hobbies">
-                        <!-- Se llenará dinámicamente -->
-                    </select>
+            <div id="edit-hobbies-modal" class="edit-hobbies-modal">
+                <div id="edit-hobbies-modal-content" class="edit-hobbies-modal-content">
+                    <span id="edit-hobbies-close-btn" class="edit-hobbies-modal-close-button">&times;</span>
+                    
+                    <div id="hobbies-container" class="hobbies-container">
+                        <div id="available-hobbies-div" class="edit-hobbies-modal-div">
+                            <label for="available-hobbies" class="hobbies-label">Hobbies disponibles</label>
+                            <div id="available-hobbies-content" class="hobbies-modal">
+                                <select id="available-hobbies" multiple>
+                                    <!-- Se llena dinámicamente -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="user-hobbies-div" class="edit-hobbies-modal-div">
+                            <label for="user-hobbies" class="hobbies-label">Tus hobbies</label>
+                            <div id="user-hobbies-content" class="hobbies-modal">
+                                <select id="user-hobbies" multiple>
+                                    <!-- Se llenará dinámicamente -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="close-btn-container" class="close-btn-container">
+                        <button id="accept-hobby-changes-btn" class="accept-hobby-changes-button">Aceptar</button>
+                    </div>
                 </div>
             </div>
         </main>
