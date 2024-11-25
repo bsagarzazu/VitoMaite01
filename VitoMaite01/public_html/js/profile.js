@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         profile.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
         name.textContent = "Nombre: " + user.nick;
-        gender.textContent = "Género: " + user.gender;
+        gender.textContent = "Género: " + (user.gender === "H" ? "Hombre" : "Mujer");
         city.textContent = "Ciudad: " + user.city;
         age.textContent = "Edad: " + user.age;
         
