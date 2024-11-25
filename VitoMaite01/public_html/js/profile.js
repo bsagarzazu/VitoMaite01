@@ -43,8 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     saveCity.style.display = "none";
                     editCity.style.display = "flex";
                 });
-        
-        
     });
 
     getUserHobbies(user.email, true).then((selected) => displayHobbies(selected));
@@ -70,9 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         getUserHobbies(user.email, true)
             .then((hobbies) => {
-                alert("Longitudes: tus hobbies " + hobbies.length + " hobbies a borrar " + hobbiesToDelete.length + " hobbies a añadir " + hobbiesToAdd.length);
                 const newHobbyCount = hobbies.length - hobbiesToDelete.length + hobbiesToAdd.length;
-                alert("Nueva cantidad " + newHobbyCount);
                 if(newHobbyCount < 0 || newHobbyCount > 5) {
                     alert("La nueva cantidad de hobbies debe estar entre 0 y 5");
                 }
