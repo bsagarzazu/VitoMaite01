@@ -16,6 +16,12 @@ document.addEventListener("DOMContentLoaded", function () {
         
         displayHobbies(getUserHobbies(user.email));
     }
+    
+    const editHobbiesBtn = document.getElementById("editHobbies-btn");
+    editHobbiesBtn.addEventListener("click", (event) => {
+        const editHobbiesModal = document.getElementById("edit-hobbies-modal");
+        editHobbiesModal.style.display = "flex";
+    });
 });
 
 function displayHobbies(hobbies) {

@@ -1,9 +1,17 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this template
-*/
-/* 
-    Created on : 20 nov 2024, 13:04:14
-    Author     : sagar
-*/
+.hobbies-modal {
+    border-radius: 10px;
+    border: 2px solid #000000;
+}
 
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}

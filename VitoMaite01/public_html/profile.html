@@ -7,6 +7,7 @@
         <title>VitoMaite</title>
         <link rel="icon" href="img/icon.png" type="image/x-icon">
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/profile.css">
     </head>
     <body>
 
@@ -54,18 +55,36 @@
             <div id="profile-info" class="profile-info">
                 <h2>Mi Perfil</h2>
                 <img src="" id="profile-photo" alt="Foto de perfil">
+                <button id="editPhoto-btn">Seleccionar otra foto</button>
                 <div>
                     <p id="profile-name">Nombre: </p>
                 </div>
                 <p id="profile-gender">Genero: </p>
                 <p id="profile-city">Ciudad: </p>
+                <button id="editCity-btn">Cambiar Ciudad</button>
                 <p id="profile-age">Edad: </p>
                 <div id="hobbies-section">
                     <p id="hobbies">
                         <!-- Las aficiones se llenarán dinámicamente con JS -->
                     </p>
                 </div>
-                <button id="edit-btn">Editar Perfil</button>
+                <button id="editHobbies-btn">Modificar Hobbies</button>
+            </div>
+            
+            <div id="edit-hobbies-modal" class="modal">
+                <div id="available-hobbies-content" class="hobbies-modal">
+                    <label>Hobbies disponibles</label>
+                    <select id="available-hobbies" multiple>
+                        <!-- Se llena dinámicamente -->
+                    </select>
+                </div>
+                
+                <div id="user-hobbies-content" class="hobbies-modal">
+                    <label>Tus hobbies</label>
+                    <select id="user-hobbies">
+                        <!-- Se llenará dinámicamente -->
+                    </select>
+                </div>
             </div>
         </main>
 
