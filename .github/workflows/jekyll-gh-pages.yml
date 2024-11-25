@@ -1,47 +1,44 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
 on:
-  # Ejecuta cuando se realicen push a la rama principal
+  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
 
-  # Permite ejecutar el flujo manualmente desde la pestaña de Actions
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Job de construcción
+  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      # Usar una acción para configurar GitHub Pages sin Jekyll (si no usas Jekyll)
-      - name: Set up GitHub Pages without Jekyll
-        run: echo 'jekyll: false' > .nojekyll
-
-      # Copiar los archivos de public_html a una carpeta temporal para la acción de despliegue
-      - name: Copy files from public_html
-        run: |
-          mkdir -p ./_site
-          cp -r ./VitoMaite01/public_html/* ./_site/
-
-      # Subir los artefactos generados
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./VitoMaite01/public_html
+          destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./_site
 
-  # Job de despliegue
+  # Deployment job
   deploy:
     environment:
       name: github-pages
