@@ -178,3 +178,58 @@ function updateUserHobbies(userEmail, hobbies, addHobbies) {
         };
     });
 }
+
+/*
+ * Si isCity es true cambia la ciudad por data
+ * Si isCity es false cambia la imagen por date
+ */
+function updateUserData(email, data, isCity) {
+    return new Promise((resolve, reject) => {
+        const request = window.indexedDB.open("vitomaite01", 1);
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            // Acceder al objectStore "users" que contiene los datos de los usuarios
+            const userStore = db.transaction("users", "readwrite").objectStore("users");
+
+            // Crear la clave de búsqueda para el índice por email
+            const index = userStore.index("byEmail");
+            const userRequest = index.get(email); // Buscar el usuario por email
+
+            userRequest.onsuccess = (event) => {
+                const user = event.target.result;
+
+                if (user) {
+                    if (isCity) {
+                        // Si isCity es true, actualizamos la ciudad
+                        user.city = data;
+                    } else {
+                        // Si isCity es false, actualizamos la imagen (Base64)
+                        user.image = data;
+                    }
+
+                    // Actualizamos el objeto usuario con los nuevos datos
+                    const updateRequest = userStore.put(user);
+
+                    updateRequest.onsuccess = () => {
+                        resolve("Usuario actualizado correctamente.");
+                    };
+
+                    updateRequest.onerror = () => {
+                        reject("Error al actualizar el usuario.");
+                    };
+                } else {
+                    reject("Usuario no encontrado.");
+                }
+            };
+
+            userRequest.onerror = () => {
+                reject("Error al buscar el usuario.");
+            };
+        };
+
+        request.onerror = () => {
+            reject("Error al abrir la base de datos.");
+        };
+    });
+}
