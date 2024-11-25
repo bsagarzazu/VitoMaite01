@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const likesBtn = document.getElementById("likes-btn");
     const logoutBtn = document.getElementById("logout-btn");
     const profileBtn = document.getElementById("view-profile-btn");
-    const editBtn = document.getElementById("edit-profile-btn");
     const userInfo = document.getElementById("user-info");
     const userLogged = document.getElementById("user-logged");
     const userGuest = document.getElementById("user-guest");
@@ -41,10 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     profileBtn.addEventListener("click", function () {
         window.location.href = "profile.html";
-    });
-    
-    editBtn.addEventListener("click", function () {
-        window.location.href = "edit.html";
     });
 
     mapBtn.addEventListener("click", function () {
