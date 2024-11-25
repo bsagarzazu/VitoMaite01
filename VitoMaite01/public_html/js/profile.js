@@ -9,9 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const editHobbiesModal = document.getElementById("edit-hobbies-modal");
     const addHobbiesSelect = document.getElementById("available-hobbies");
     const deleteHobbiesSelect = document.getElementById("user-hobbies");
-    
-    let selected;
-    let unselected;
 
     const closeBtn = document.getElementById("edit-hobbies-close-btn");
     closeBtn.addEventListener("click", (event) => {
