@@ -5,9 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const gender = document.getElementById("profile-gender");
     const city = document.getElementById("profile-city");
     const age = document.getElementById("profile-age");
-
-    const addHobbies = document.getElementById("");
-    const deleteHobbies = document.getElementById("");
+    
+    const editHobbiesModal = document.getElementById("edit-hobbies-modal");
+    const addHobbiesSelect = document.getElementById("available-hobbies");
+    const deleteHobbiesSelect = document.getElementById("user-hobbies");
+    
     let selected;
     let unselected;
 
@@ -25,8 +27,6 @@ document.addEventListener("DOMContentLoaded", function () {
     city.textContent = "Ciudad: " + user.city;
     age.textContent = "Edad: " + user.age;
 
-    selected = getUserHobbies(user.email, true);
-    unselected = getUserHobbies(user.email, false);
 
     Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
             .then(([selected, unselected]) => {
@@ -34,17 +34,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const editHobbiesBtn = document.getElementById("editHobbies-btn");
                 editHobbiesBtn.addEventListener("click", (event) => {
-                    const editHobbiesModal = document.getElementById("edit-hobbies-modal");
-
-                    const addHobbiesSelect = document.getElementById("available-hobbies");
-                    const deleteHobbiesSelect = document.getElementById("user-hobbies");
-
                     fillHobbies(addHobbiesSelect, unselected);
                     fillHobbies(deleteHobbiesSelect, selected);
 
                     editHobbiesModal.style.display = "flex";
                 });
             });
+            
+    const acceptChangesBtn = document.getElementById("accept-hobby-changes-btn");
+    acceptChangesBtn.addEventListener("click", (event) => {
+        const hobbiesToDelete = Array.from(deleteHobbiesSelect.options)
+            .filter(option => option.selected)
+            .map(option => option.value);
+        const hobbiesToAdd = Array.from(addHobbiesSelect.options)
+            .filter(option => option.selected)
+            .map(option => option.value);
+        
+        getUserHobbies(user.email, true)
+            .then((hobbies) => {
+                alert("Longitudes: tus hobbies " + hobbies.length + " hobbies a borrar " + hobbiesToDelete.length + " hobbies a añadir " + hobbiesToAdd.length);
+                const newHobbyCount = hobbies.length - hobbiesToDelete.length + hobbiesToAdd.length;
+                alert("Nueva cantidad " + newHobbyCount);
+                if(newHobbyCount < 0 || newHobbyCount > 5) {
+                    alert("La nueva cantidad de hobbies debe estar entre 0 y 5");
+                }
+                else {
+                    updateUserHobbies(user.email, hobbiesToDelete, false)
+                        .then(message => console.log(message));
+                    updateUserHobbies(user.email, hobbiesToAdd, true)
+                        .then(message => console.log(message));
+                    editHobbiesModal.style.display = "none";
+                    
+                    // Actualizar los hobbies en el perfil
+                    getUserHobbies(user.email, true)
+                        .then((userHobbies) => {
+                            displayHobbies(userHobbies);
+                        });
+                }
+            });
+        
+        
+    });
 
     //Modificar la foto
     // Obtener elementos
@@ -213,14 +243,16 @@ function updateUserHobbies(userEmail, hobbies, addHobbies) {
             if (addHobbies) {
                 // Si addHobbies es true, añadimos los hobbies para el usuario
                 hobbies.forEach(hobbyId => {
-                    const hobbyRecord = {
-                        email: userEmail,
-                        hobbyId: hobbyId
-                    };
-                    const addRequest = userHobbyStore.add(hobbyRecord);
-                    addRequest.onerror = () => {
-                        reject("Error al añadir hobby para el usuario.");
-                    };
+                    return new Promise((hobby_resolve, hobby_reject) => {
+                        const hobbyRecord = {
+                            userEmail: userEmail,
+                            hobbyId: parseInt(hobbyId)
+                        };
+                        const addRequest = userHobbyStore.add(hobbyRecord);
+                        addRequest.onsuccess = (event) => {
+                            hobby_resolve();
+                        };
+                    });
                 });
                 resolve("Hobbies añadidos correctamente.");
             } else {
