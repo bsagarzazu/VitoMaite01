@@ -35,27 +35,29 @@ document.addEventListener("DOMContentLoaded", function () {
         editCity.style.display = "none";
     });
     saveCityBtn.addEventListener("click", (event) => {
-        updateUserData(user.email, citySelect.value, true);
+        updateUserData(user.email, citySelect.value, true)
+                .then(() => {
+                    let newUser = JSON.parse(sessionStorage.getItem("userLoggedIn"));
+                    city.textContent = newUser.city;
+
+                    saveCity.style.display = "none";
+                    editCity.style.display = "flex";
+                });
         
-        let newUser = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-        city.textContent = newUser.city;
         
-        saveCity.style.display = "none";
-        editCity.style.display = "flex";
     });
 
-    Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
-            .then(([selected, unselected]) => {
-                displayHobbies(selected);
-
-                const editHobbiesBtn = document.getElementById("editHobbies-btn");
-                editHobbiesBtn.addEventListener("click", (event) => {
+    getUserHobbies(user.email, true).then((selected) => displayHobbies(selected));
+    
+    const editHobbiesBtn = document.getElementById("editHobbies-btn");
+    editHobbiesBtn.addEventListener("click", (event) => {
+        Promise.all([getUserHobbies(user.email, true), getUserHobbies(user.email, false)])
+                .then(([selected, unselected]) => {
                     fillHobbies(addHobbiesSelect, unselected);
                     fillHobbies(deleteHobbiesSelect, selected);
-
                     editHobbiesModal.style.display = "flex";
                 });
-            });
+    });
             
     const acceptChangesBtn = document.getElementById("accept-hobby-changes-btn");
     acceptChangesBtn.addEventListener("click", (event) => {
