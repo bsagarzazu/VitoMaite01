@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (newImage) {
             // Establecer la imagen previsualizada en el perfil
             profilePhoto.src = newImage; // Cargar la imagen en el perfil
-            userAvatar.src = newImage;
-            //Crgar la imagen 
+            userAvatar.src = newImage; // Cargar la imagen en el perfil 'user-avatar'
+            
 
             updateUserData(user.email, newImage, false) // El 'false' indica que estamos actualizando la imagen
                     .then((message) => {
