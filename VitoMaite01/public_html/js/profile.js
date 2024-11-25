@@ -10,9 +10,9 @@ document.addEventListener("DOMContentLoaded", function () {
         
         profile.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
         name.textContent = "Nombre: " + user.nick;
-        gender.textContent = "Nombre: " + user.nick;
-        city.textContent = "Nombre: " + user.nick;
-        age.textContent = "Nombre: " + user.nick;
+        gender.textContent = "Género: " + user.nick;
+        city.textContent = "Ciudad: " + user.nick;
+        age.textContent = "Edad: " + user.nick;
         
         displayHobbies(getUserHobbies(user.email));
     }
@@ -36,7 +36,9 @@ function getUserHobbies(userEmail, includeUserHobbies = true) {
             // Acceder al objectStore "userHobby"
             const userHobbyStore = db.transaction("userHobby").objectStore("userHobby");
             const index = userHobbyStore.index("byEmail");
-            const hobbyRequest = index.openCursor(IDBKeyRange.only(userEmail));
+
+            // Excluir el userEmail (utilizamos IDBKeyRange.bound para obtener todo menos el userEmail)
+            const hobbyRequest = index.openCursor(IDBKeyRange.bound(null, userEmail, false, true));
 
             const hobbyIds = [];
             hobbyRequest.onsuccess = (event) => {
