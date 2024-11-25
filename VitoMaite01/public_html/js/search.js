@@ -1,4 +1,3 @@
-//BEÑAT
 document.addEventListener("DOMContentLoaded", function () {
     const searchBtn = document.getElementById("search-btn");
     

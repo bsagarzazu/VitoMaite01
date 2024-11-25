@@ -1,4 +1,3 @@
-//BEÑAT
 document.addEventListener("DOMContentLoaded", function () {
     const hobbiesSection = document.getElementById("hobbies-section");
     const hobbiesSelect = document.getElementById("hobbies");

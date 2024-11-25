@@ -1,4 +1,3 @@
-//ARITZ
 document.addEventListener("DOMContentLoaded", (event) => {
     // User table data
     const users = [
