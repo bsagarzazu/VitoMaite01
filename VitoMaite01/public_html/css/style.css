@@ -188,6 +188,7 @@ main {
     max-width: 300px;
 }
 
+.edit-btn,
 .login-box button,
 .search-box select,
 .search-box button {
