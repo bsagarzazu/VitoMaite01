@@ -408,7 +408,8 @@ footer {
 }
 
 .edit-photo-modal {
+    display: none; 
     border-radius: 10px;
     border: 2px solid #000000;
-    height: 150px;
+    height: 450px;
 }

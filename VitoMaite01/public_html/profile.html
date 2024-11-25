@@ -55,15 +55,23 @@
                 <h2>Mi Perfil</h2>
                 <img src="" id="profile-photo" alt="Foto de perfil">
                 <button id="editPhoto-btn">Seleccionar otra foto</button>
-                
+
                 <!-- Modificar Foto -->
                 <div id="edit-photo-modal" class="edit-photo-modal">
-                <div class="image-container" id="profileImageContainer">
-                    <span id="imagePreviewText">Arrastra una imagen o selecciona desde el archivo</span>
+                    <div id="edit-photo-modal-content" class="edit-photo-modal-content">
+                        <span id="edit-photo-close-btn" class="edit-photo-modal-close-button">&times;</span>
+                        
+                        <div class="image-container" id="profileImageContainer">
+                            <span id="imagePreviewText">Arrastra una imagen o selecciona desde el archivo</span>
+                        </div>
+                        <input type="file" class="file-input" id="profileImageInput" accept="image/*">
+
+                        <div id="close-btn-container" class="close-btn-container">
+                            <button id="accept-photo-changes-btn" class="accept-photo-changes-button">Aceptar</button>
+                        </div>
+                    </div>
                 </div>
-                <input type="file" class="file-input" id="profileImageInput" accept="image/*">
-                </div>
-                
+
                 <div>
                     <p id="profile-name">Nombre: </p>
                 </div>
@@ -78,11 +86,11 @@
                 </div>
                 <button id="editHobbies-btn">Modificar Hobbies</button>
             </div>
-            
+
             <div id="edit-hobbies-modal" class="edit-hobbies-modal">
                 <div id="edit-hobbies-modal-content" class="edit-hobbies-modal-content">
                     <span id="edit-hobbies-close-btn" class="edit-hobbies-modal-close-button">&times;</span>
-                    
+
                     <div id="hobbies-container" class="hobbies-container">
                         <div id="available-hobbies-div" class="edit-hobbies-modal-div">
                             <label for="available-hobbies" class="hobbies-label">Hobbies disponibles</label>

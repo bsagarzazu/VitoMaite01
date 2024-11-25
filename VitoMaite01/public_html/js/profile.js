@@ -4,27 +4,27 @@ document.addEventListener("DOMContentLoaded", function () {
     const gender = document.getElementById("profile-gender");
     const city = document.getElementById("profile-city");
     const age = document.getElementById("profile-age");
-    
+
     const addHobbies = document.getElementById("");
     const deleteHobbies = document.getElementById("");
     let selected;
     let unselected;
-    
-    if(sessionStorage.getItem("userLoggedIn")) {
+
+    if (sessionStorage.getItem("userLoggedIn")) {
         const user = JSON.parse(sessionStorage.getItem("userLoggedIn"));
-        
+
         profile.src = "data:image/png;base64," + (user.image || "") || "img/placeholder.jpg";
         name.textContent = "Nombre: " + user.nick;
         gender.textContent = "Género: " + (user.gender === "H" ? "Hombre" : "Mujer");
         city.textContent = "Ciudad: " + user.city;
         age.textContent = "Edad: " + user.age;
-        
+
         selected = getUserHobbies(user.email, true);
         unselected = getUserHobbies(user.email, false);
-        
+
         displayHobbies(selected);
     }
-    
+
     const editHobbiesBtn = document.getElementById("editHobbies-btn");
     editHobbiesBtn.addEventListener("click", (event) => {
         const editHobbiesModal = document.getElementById("edit-hobbies-modal");
@@ -32,6 +32,26 @@ document.addEventListener("DOMContentLoaded", function () {
         fillHobbies(deleteHobbies, selected);
         editHobbiesModal.style.display = "flex";
     });
+
+// Mostrar el modal para seleccionar una imagen
+    const editPhotoBtn = document.getElementById("editPhoto-btn");
+    editPhotoBtn.addEventListener("click", function () {
+        const modal = document.getElementById("edit-photo-modal");
+        modal.style.display = "block";
+    });
+
+// Cerrar el modal de editar foto
+    document.getElementById("edit-photo-close-btn").addEventListener("click", function () {
+        const modal = document.getElementById("edit-photo-modal");
+        modal.style.display = "none";
+    });
+
+// Aceptar cambios de la foto y cerrarla
+    document.getElementById("accept-photo-changes-btn").addEventListener("click", function () {
+        const modal = document.getElementById("edit-photo-modal");
+        modal.style.display = "none";
+    });
+
 });
 
 function displayHobbies(hobbies) {
@@ -61,7 +81,7 @@ function fillHobbies(selectElement, hobbies) {
 function getUserHobbies(userEmail, includeUserHobbies) {
     return new Promise((resolve, reject) => {
         const request = window.indexedDB.open("vitomaite01", 1);
-        
+
         request.onsuccess = (event) => {
             const db = event.target.result;
 
@@ -87,7 +107,7 @@ function getUserHobbies(userEmail, includeUserHobbies) {
                     hobbyCursor.onsuccess = (event) => {
                         const hobbyCursorResult = event.target.result;
                         if (hobbyCursorResult) {
-                            allHobbies.push({ id: hobbyCursorResult.value.hobbyId, name: hobbyCursorResult.value.hobbyName });
+                            allHobbies.push({id: hobbyCursorResult.value.hobbyId, name: hobbyCursorResult.value.hobbyName});
                             hobbyCursorResult.continue();
                         } else {
                             // Filtrar los hobbies del usuario y los que no tiene
@@ -233,3 +253,69 @@ function updateUserData(email, data, isCity) {
         };
     });
 }
+
+//Funciones de modificar la foto
+// Función para cargar la imagen desde la base de datos y mostrarla en el perfil
+function loadProfileImage(email) {
+    return new Promise((resolve, reject) => {
+        const request = window.indexedDB.open("vitomaite01", 1);
+
+        request.onsuccess = (event) => {
+            const db = event.target.result;
+            const userStore = db.transaction("users", "readonly").objectStore("users");
+            const index = userStore.index("byEmail");
+            const userRequest = index.get(email);
+
+            userRequest.onsuccess = (event) => {
+                const user = event.target.result;
+
+                if (user && user.image) {
+                    // Si existe una imagen guardada, actualizar la etiqueta <img> con la imagen
+                    const profilePhotoElement = document.getElementById("profile-photo");
+                    profilePhotoElement.src = user.image; // Actualiza la fuente de la imagen con Base64
+                    resolve("Imagen cargada correctamente.");
+                } else {
+                    reject("No se encontró imagen para este usuario.");
+                }
+            };
+
+            userRequest.onerror = () => {
+                reject("Error al buscar el usuario.");
+            };
+        };
+
+        request.onerror = () => {
+            reject("Error al abrir la base de datos.");
+        };
+    });
+}
+
+// Función para gestionar la carga de la imagen desde el archivo
+document.getElementById("profileImageInput").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            const base64Image = reader.result; // Obtener la imagen en Base64
+            const email = "user@example.com"; // Cambiar esto por el email del usuario autenticado
+
+            // Usamos la función updateUserData para guardar la imagen
+            updateUserData(email, base64Image, false) // Actualizamos la imagen (isCity = false)
+                    .then(() => {
+                        console.log("Imagen guardada correctamente.");
+                        loadProfileImage(email); // Volver a cargar la imagen del perfil
+                    })
+                    .catch((error) => {
+                        console.error("Error al guardar la imagen:", error);
+                    });
+        };
+
+        reader.onerror = function () {
+            console.error("Error al leer la imagen.");
+        };
+
+        // Lee el archivo de imagen como URL de datos (Base64)
+        reader.readAsDataURL(file);
+    }
+});
