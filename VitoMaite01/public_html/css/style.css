@@ -436,7 +436,3 @@ footer {
     align-items: center;
     gap: 5px;  /* Espacio entre los elementos dentro de cada bloque */
 }
-
-#city {
-    margin-left: 10px;  /* Opcional: Añadir margen a la izquierda del select */
-}
