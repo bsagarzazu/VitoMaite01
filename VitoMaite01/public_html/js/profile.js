@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const profilePhoto = document.getElementById("profile-photo");
+    const userAvatar = document.getElementById("user-avatar");
     const name = document.getElementById("profile-name");
     const gender = document.getElementById("profile-gender");
     const city = document.getElementById("profile-city");
@@ -79,17 +80,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Cuando el usuario hace clic en "Aceptar", actualizar la foto en IndexedDB
+    // Cuando el usuario hace clic en "Aceptar", actualizar la foto en IndexedDB y cierre el modal
     acceptPhotoChangesBtn.addEventListener("click", () => {
         const newImage = document.getElementById("imagePreview")?.src; // Obtener la imagen en Base64 desde el contenedor
 
         if (newImage) {
             // Establecer la imagen previsualizada en el perfil
             profilePhoto.src = newImage; // Cargar la imagen en el perfil
+            userAvatar.src = newImage;
+            //Crgar la imagen 
 
-            // Aquí debes pasar el email del usuario y la nueva imagen para actualizarla
-            const email = "usuario@dominio.com"; // Debes obtener el email del usuario de alguna manera
-            updateUserData(email, newImage, false) // El 'false' indica que estamos actualizando la imagen
+            updateUserData(user.email, newImage, false) // El 'false' indica que estamos actualizando la imagen
                     .then((message) => {
                         console.log(message); // Mostrar mensaje de éxito
                         editPhotoModal.style.display = "none"; // Cerrar modal
@@ -97,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     .catch((error) => {
                         console.error(error); // Mostrar mensaje de error
                     });
+            editPhotoModal.style.display = "none";
         } else {
             alert("Por favor selecciona una imagen.");
         }
