@@ -98,7 +98,7 @@ function setImageFor(user, imgElement) {
         }
     }
     else {
-        imgElement.src = "img/black.png";
+        imgElement.src = "img/placeholder.jpg";
     }
 }
 
