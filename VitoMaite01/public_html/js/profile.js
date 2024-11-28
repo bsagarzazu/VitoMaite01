@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     //Modificar la foto
-    // Obtener elementos
+    // Obtener elemento
     const profileImageInput = document.getElementById("profileImageInput");
     const acceptPhotoChangesBtn = document.getElementById("accept-photo-changes-btn");
     const editPhotoModal = document.getElementById("edit-photo-modal");
